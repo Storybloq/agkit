@@ -497,7 +497,7 @@ function withUpdateBanner(result: CallToolResult, cell: UpdateBannerCell): CallT
   // carry a secret, but the hygiene is a policy of the SURFACE, not a per-site judgement.
   const banner = displayCapped(
     redactText(
-      `Update available: agkit ${latest} is newer than ${current}. Update: npm install -g @shyegg/agkit@latest. (Shown once per session; data.update_available carries the same fact on every status call.)`,
+      `Update available: agkit ${latest} is newer than ${current}. Update: npm install -g @storybloq/agkit@latest. (Shown once per session; data.update_available carries the same fact on every status call.)`,
     ),
     MAX_SUMMARY_CHARS,
   );

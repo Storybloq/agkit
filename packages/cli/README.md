@@ -1,4 +1,4 @@
-# `@shyegg/agkit` — AgentKit management CLI + MCP
+# `@storybloq/agkit` — AgentKit management CLI + MCP
 
 `agkit` is the first-party command-line interface and MCP server for the AgentKit
 management plane. One binary, three surfaces that share a single bundled core: the
@@ -12,7 +12,7 @@ your own code imports it.
 ## Install
 
 ```sh
-npm install -g @shyegg/agkit
+npm install -g @storybloq/agkit
 ```
 
 Requires Node 22 or newer.
@@ -20,7 +20,7 @@ Requires Node 22 or newer.
 First-touch bootstrap without a global install:
 
 ```sh
-npx @shyegg/agkit init
+npx @storybloq/agkit init
 ```
 
 `npx` is supported for first-touch only (OD-24); the primary, supported path is the
@@ -34,7 +34,7 @@ production rebinding, so it goes through a plan and a typed confirmation.
 **1. Install.**
 
 ```sh
-npm install -g @shyegg/agkit
+npm install -g @storybloq/agkit
 ```
 
 **2. Log in.**

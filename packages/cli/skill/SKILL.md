@@ -85,7 +85,7 @@ CLI-local codes (all terminal, exit 2):
 | `keychain_unavailable`      | no OS keychain → prefer `AGKIT_TOKEN`                          |
 | `insecure_storage_refused`  | CI plaintext → set `AGKIT_ALLOW_INSECURE_STORAGE=1` or use token |
 | `insecure_file_permissions` | widened creds file → `chmod 600` (see `error.hint`)           |
-| `version_skew`              | CLI < server → `npm install -g @shyegg/agkit@latest`          |
+| `version_skew`              | CLI < server → `npm install -g @storybloq/agkit@latest`       |
 
 Wire (server) codes carry a `retry` class in `error.retry`. Retry with backoff ONLY
 `retry_with_backoff` codes (`rate_limited`, `idempotency_in_flight`, `internal_error`,

@@ -105,7 +105,7 @@ export const CLI_LOCAL_REGISTRY: Record<CliLocalCode, CliCodeSpec> = {
   },
   version_skew: {
     title: "CLI out of date",
-    hint: "npm install -g @shyegg/agkit@latest",
+    hint: "npm install -g @storybloq/agkit@latest",
     exitCode: EXIT.TERMINAL,
   },
   usage_error: {
@@ -140,7 +140,7 @@ export const CLI_LOCAL_REGISTRY: Record<CliLocalCode, CliCodeSpec> = {
     // The remedy is to INSTALL a launcher there is a path to. This is the whole ladder's premise:
     // a globally-installed CLI is what puts an absolute `agkit` on PATH for `resolveAgkitBin` to
     // find, and it is the same install a registration snippet must name.
-    hint: "npm install -g @shyegg/agkit",
+    hint: "npm install -g @storybloq/agkit",
     exitCode: EXIT.TERMINAL,
   },
 };

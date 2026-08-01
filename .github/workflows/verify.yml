@@ -70,7 +70,7 @@ jobs:
       - name: Dev build
         # No AGKIT_RELEASE_VERSION: this is a DEV build and must self-report
         # 0.0.0-dev. Release builds happen only in release.yml, from a tag.
-        run: pnpm --filter @shyegg/agkit build
+        run: pnpm --filter @storybloq/agkit build
 
       - name: Pack whitelist (EXACTLY dist/** + skill/** + README.md + LICENSE + package.json)
         working-directory: packages/cli

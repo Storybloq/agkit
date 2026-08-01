@@ -6,7 +6,7 @@
 // tarball's own manifest claims the same server name. Two hand-maintained copies of ONE identity
 // is exactly the drift class this module exists to delete — every value emitted below is DERIVED
 // from the parsed manifest, the one committed artifact is produced by
-// `pnpm --filter @shyegg/agkit regen:goldens` (this package's single regen entry point, T-225
+// `pnpm --filter @storybloq/agkit regen:goldens` (this package's single regen entry point, T-225
 // ruling R3), and `server-json-drift.test.ts` byte-locks the committed bytes to this renderer.
 //
 // PURE over a parsed manifest: this module reads no file and never touches `cwd`. The regen row

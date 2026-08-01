@@ -23,7 +23,7 @@ export const SDK_MODULE_IMPORT = "AgentKit";
 const AGENT_STREAM_PATH = "/v1/agent/stream";
 
 /** The npm spec `agkit` installs from — quoted in the next-steps copy. */
-export const CLI_PACKAGE_SPEC = "@shyegg/agkit";
+export const CLI_PACKAGE_SPEC = "@storybloq/agkit";
 
 /** Placeholders for the values init cannot know. Named once so the snippet and its test agree. */
 const PLACEHOLDER = {

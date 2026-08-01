@@ -1,7 +1,7 @@
 # agkit — public build-input mirror
 
 This repository is the **published-source mirror** for the npm package
-[`@shyegg/agkit`](https://www.npmjs.com/package/@shyegg/agkit) — the AgentKit
+[`@storybloq/agkit`](https://www.npmjs.com/package/@storybloq/agkit) — the AgentKit
 management-plane CLI and MCP server. It exists so that npm **provenance** means
 something: a provenance attestation says "these published bytes were built from
 this source, by this workflow", and that claim is only checkable if the source is
@@ -51,8 +51,8 @@ version and compared them file by file. Two checks then bind it to reality:
 You can run the same check yourself:
 
 ```sh
-npm pack @shyegg/agkit@<version>
-node .github/verify-expect.mjs shyegg-agkit-<version>.tgz RELEASE_EXPECT.json
+npm pack @storybloq/agkit@<version>
+node .github/verify-expect.mjs storybloq-agkit-<version>.tgz RELEASE_EXPECT.json
 ```
 
 ## Layout
@@ -69,7 +69,7 @@ node .github/verify-expect.mjs shyegg-agkit-<version>.tgz RELEASE_EXPECT.json
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm --filter @shyegg/agkit build
+pnpm --filter @storybloq/agkit build
 ```
 
 A build with no `AGKIT_RELEASE_VERSION` set is a development build and reports

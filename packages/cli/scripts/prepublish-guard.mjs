@@ -1,4 +1,4 @@
-// Fail-closed pre-publish gate for `@shyegg/agkit` (T-228 reqs 4/5, AMENDMENT II item 6).
+// Fail-closed pre-publish gate for `@storybloq/agkit` (T-228 reqs 4/5, AMENDMENT II item 6).
 // Plain node, ZERO dependencies and ZERO TypeScript: `prepublishOnly` runs it as the FIRST
 // segment, before `pnpm build`, so nothing that needs building may be on its path.
 //
@@ -142,7 +142,7 @@ function collectFindings({ env, pkg, serverJsonText }) {
     blocked(
       "G6",
       "server.json is missing beside package.json — an absent registry descriptor is a refusal, not a " +
-        "skip; regenerate it with `pnpm --filter @shyegg/agkit regen:goldens`.",
+        "skip; regenerate it with `pnpm --filter @storybloq/agkit regen:goldens`.",
     );
   } else {
     let descriptor;

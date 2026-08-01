@@ -7,5 +7,5 @@
 
 /** The remedy when the CLIENT is AHEAD (the server speaks an older major). */
 export function clientAheadRemedy(pinnedMajor: string): string {
-  return `point AGKIT_API_URL at a server speaking management major ${pinnedMajor}, or install the matching older @shyegg/agkit release`;
+  return `point AGKIT_API_URL at a server speaking management major ${pinnedMajor}, or install the matching older @storybloq/agkit release`;
 }

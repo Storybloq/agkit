@@ -42,7 +42,7 @@ export function readUpdateStamp(deps: ConfigDirDeps, current: string): UpdateInf
   if (!isNewer(latest, current)) return NONE;
   return {
     latest,
-    notice: `agkit: a newer version is available (${current} -> ${latest}). Update: npm install -g @shyegg/agkit@latest\n`,
+    notice: `agkit: a newer version is available (${current} -> ${latest}). Update: npm install -g @storybloq/agkit@latest\n`,
   };
 }
 

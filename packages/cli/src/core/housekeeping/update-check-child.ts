@@ -14,7 +14,7 @@ import { isValidVersion, parseIsoMs } from "./version-util";
  * URL below and `agkit upgrade`'s `npm install -g <name>@latest` argv both derive from it, so a
  * rename can never leave one call site pointing at a stale name. Byte-equal to `package.json:2`.
  */
-export const PACKAGE_NAME = "@shyegg/agkit";
+export const PACKAGE_NAME = "@storybloq/agkit";
 /** The `latest` dist-tag endpoint — its JSON carries a top-level `.version`. Derived from `PACKAGE_NAME`. */
 export const REGISTRY_LATEST_URL = `https://registry.npmjs.org/${PACKAGE_NAME}/latest`;
 /** Hard timeout for the whole request (AbortController) — the check is best-effort. */

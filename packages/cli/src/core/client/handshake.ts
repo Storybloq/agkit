@@ -123,7 +123,7 @@ export function versionSkewError(
     : `this CLI targets management v${pinned} but the server advertises v${advertised} (an older MAJOR) — the server predates this CLI`;
   const detail = opts.settledSuccess === true ? `${base}. ${SKEW_SUCCESS_OUTCOME_UNKNOWN}` : base;
   const hint = behind
-    ? CLI_LOCAL_REGISTRY.version_skew.hint // "npm install -g @shyegg/agkit@latest"
+    ? CLI_LOCAL_REGISTRY.version_skew.hint // "npm install -g @storybloq/agkit@latest"
     : clientAheadRemedy(pinnedMajor as string);
   return new CliLocalError("version_skew", {
     detail,

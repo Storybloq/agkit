@@ -7,7 +7,7 @@
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
-      "identifier": "@shyegg/agkit",
+      "identifier": "@storybloq/agkit",
       "version": "0.0.1",
       "transport": {
         "type": "stdio"

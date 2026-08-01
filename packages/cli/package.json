@@ -1,5 +1,5 @@
 {
-  "name": "@shyegg/agkit",
+  "name": "@storybloq/agkit",
   "version": "0.0.1",
   "description": "AgentKit management-plane CLI + MCP server (agkit).",
   "mcpName": "cloud.agkit/agkit",

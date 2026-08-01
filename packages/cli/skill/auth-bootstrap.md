@@ -54,7 +54,7 @@ Read `error.code` from the `--json` envelope:
 - `insecure_file_permissions` — the plaintext credentials file is group/other
   readable. `error.hint` gives the exact `chmod 600 …` fix.
 - `version_skew` — the CLI is older than the server's management API. Recovery:
-  `npm install -g @shyegg/agkit@latest`.
+  `npm install -g @storybloq/agkit@latest`.
 
 Never downgrade the auth tier silently: if the intended rung is unavailable, surface
 it (or its structured error) — do not fall back to plaintext without an explicit

@@ -54,7 +54,7 @@ permissions:
 
 env:
   NODE_VERSION: "24"
-  PKG: "@shyegg/agkit"
+  PKG: "@storybloq/agkit"
 
 jobs:
   publish:
