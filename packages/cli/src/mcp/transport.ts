@@ -8,7 +8,7 @@
 // place every bound is named; `mcp.ts` never constructs a transport itself.
 //
 // ── WHAT T-227 S2 ADDED: TWO COMPOSED STREAMS, STILL NO SUBCLASS ─────────────────────────────────
-// SDK 1.30.0 takes `_stdin` and `_stdout` as constructor parameters, so both bounds land as STREAM
+// The SDK takes `_stdin` and `_stdout` as constructor parameters, so both bounds land as STREAM
 // COMPOSITION around the transport rather than as overrides inside it:
 //
 //     real stdin ──▶ InboundFrameGuard ──▶ [ StdioServerTransport ] ──▶ BoundedFrameWriter ──▶ real stdout
@@ -20,13 +20,17 @@
 //   • OUTBOUND (v6-1, v7-1): measures the FINAL serialized frame against a 768 KiB budget, with a
 //     deterministic emergency answer for an oversized response.
 //
-// Each guard's fail-closed hook is wired to `transport.close()` below, which is why they are built
-// here and not inside either module: only this function knows the transport they belong to.
+// Each guard's fail-closed hook is wired to the close-signalled transport's `close()` below, which
+// is why they are built here and not inside either module: only this function knows the transport
+// they belong to.
 //
-// WHY NO SUBCLASS. SDK 1.30.0 already implements every behavior we would otherwise have written,
-// byte-verified against `dist/esm/server/stdio.js` + `dist/esm/shared/stdio.js` at the pinned
-// version. All three are LOAD-BEARING for us, so `bounded-transport.test.ts` pins each one directly
-// — an SDK upgrade that drops any of them reddens the suite instead of quietly removing our bound:
+// WHY NO SUBCLASS. The SDK already implements every behavior we would otherwise have written,
+// byte-verified against `@modelcontextprotocol/server@2.0.0`'s `dist/stdio.mjs` (and, before
+// T-300, against SDK 1.30.0's `dist/esm/server/stdio.js` — the constructor, the 10 MiB default and
+// all three behaviors below are IDENTICAL across the two majors, which is why the compose chain
+// moved verbatim). All three are LOAD-BEARING for us, so `bounded-transport.test.ts` pins each one
+// directly — an SDK upgrade that drops any of them reddens the suite instead of quietly removing
+// our bound:
 //
 //   1. THE CAP IS ON BUFFERED BYTES, NOT ON COMPLETED LINES. `ReadBuffer.append`
 //      compares `(buffered + chunk.length)` against `maxBufferSize` BEFORE concatenating,
@@ -42,9 +46,34 @@
 //      and the SDK resolves the send only on the subsequent `'drain'`, so a slow reader
 //      applies backpressure rather than growing an unbounded write queue in our process. The
 //      bounded writer preserves this (see its `highWaterMark: 1` note).
+//
+// ── WHAT T-300 ADDED: THE SDK v2 SWAP AND THE ONE TRANSPORT-OBJECT DECORATOR ──────────────────────
+// TWO v2 DELTAS worth naming, neither of which touches the composition above: `close()` now PAUSES
+// the stdin stream when it removes the last `'data'` listener, and `send()` REJECTS once closed
+// (1.30.0 resolved). Both are strictly tighter than what we relied on, and the guards' fail-closed
+// hooks already treat a hangup as terminal.
+//
+// THE DECORATOR RULE (D1). Everything above wraps the STREAMS, so the object handed to the SDK is
+// the SDK's own `StdioServerTransport` and no `Transport` member can be dropped by us. That changes
+// for `withCloseSignal` below, which wraps the transport OBJECT: any such wrapper MUST forward
+// EVERY optional `Transport` member — `setSupportedProtocolVersions`, `setProtocolVersion`,
+// `sessionId`, `hasPerRequestStream` — and must forward `onmessage`/`onerror` as ACCESSORS, because
+// the serving entry assigns those on the object it is handed. A wrapper that silently swallowed
+// `onmessage` would leave both eras hanging with no type error to show for it.
+//
+// COMPOSITION ORDER IS ITSELF AN INVARIANT. The close-signal wrap is applied HERE, AT CONSTRUCTION,
+// before a single fatal hook is wired — so EVERY close initiator (a fatal guard trip, stdin EOF, the
+// SDK's own teardown, the serving entry, the caller) flows through the latch-guaranteed wrapper
+// `close()`, whose `finally` settles the latch even when the underlying close REJECTS. Wrapping
+// LATER — at the `mcp.ts` call site, as this file first did — left the guards' fatal hangup holding
+// the RAW transport, i.e. the most security-relevant close path was the one path outside the latch:
+// a raw `close()` that rejected before emitting `onclose` settled nothing and `startMcpServer` waited
+// forever. Hence the factory returns the PAIR (wrapped transport + `closed`), and nothing downstream
+// ever sees the raw object.
 import process from "node:process";
 import type { Readable, Writable } from "node:stream";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
+import type { JSONRPCMessage, Transport, TransportSendOptions } from "@modelcontextprotocol/server";
 import { createInboundGuard } from "./frame-guard";
 import { BoundedFrameWriter } from "./outbound-guard";
 
@@ -96,14 +125,20 @@ function stderrDiagnostic(text: string): void {
  * defaults the SDK would have applied, resolved here because the guards need the real streams to
  * compose around.
  *
- * The caller owns the lifecycle (`start()` happens inside `Server.connect()`, and stdin
- * EOF → `close()` is wired in `mcp.ts`): this function names the bounds and wires the seams.
+ * The caller owns the lifecycle (T-300: `start()` and the final `close()` are the serving entry's
+ * — `serveStdio` owns the transport it is handed — and stdin EOF → `close()` is wired in `mcp.ts`):
+ * this function names the bounds and wires the seams.
+ *
+ * RETURNS THE PAIR, NEVER THE RAW TRANSPORT. `transport` is already wrapped by `withCloseSignal`
+ * (see the header's composition-order note), and `closed` is the latch every close path resolves —
+ * including this factory's own fatal hangup, which is wired to the WRAPPER's `close()` so a
+ * rejecting teardown still settles the wait instead of hanging the server.
  */
 export function createBoundedTransport(
   stdin?: Readable,
   stdout?: Writable,
   options?: BoundedTransportOptions,
-): StdioServerTransport {
+): { readonly transport: Transport; readonly closed: Promise<void> } {
   const source = stdin ?? process.stdin;
   const sink = stdout ?? process.stdout;
   const diagnostic = options?.diagnostic ?? stderrDiagnostic;
@@ -122,25 +157,156 @@ export function createBoundedTransport(
     sendFrame: (frame) => outbound.sendFrame(frame),
   });
 
-  const transport = new StdioServerTransport(inbound, outbound, { maxBufferSize: MAX_FRAME_BYTES });
+  const sdk = new StdioServerTransport(inbound, outbound, { maxBufferSize: MAX_FRAME_BYTES });
+  // FIRST thing after construction, BEFORE any fatal hook: everything below closes the WRAPPER, so
+  // no close path can exist that the latch does not answer for (header, composition order).
+  const signalled = withCloseSignal(sdk);
 
-  // close() resolves synchronously in the SDK and cannot reject; the catch is belt-and-braces so a
-  // future SDK change cannot turn a hangup into an unhandled rejection.
+  // The SDK's close() resolves synchronously and cannot reject today; the wrapper's `finally`
+  // settles the latch even if that ever changes, and the catch is belt-and-braces so a hangup cannot
+  // turn into an unhandled rejection on the way there.
   const hangUp = (): void => {
-    void transport.close().catch(() => {});
+    void signalled.transport.close().catch(() => {});
   };
   // The inbound trip keeps T-226's exact observable shape — `onerror` AND `close()` — so a cap
   // breach still looks the same to the server that reads it, only with our seam's message.
+  // (`onerror` is a pass-through accessor on the wrapper, so the raw handle and the wrapped one name
+  // the SAME handler; only `close()` differs, which is why only `close()` goes through the wrapper.)
   inbound.onFatal = (error) => {
-    transport.onerror?.(error);
+    sdk.onerror?.(error);
     hangUp();
   };
   outbound.onFatal = hangUp;
   // `pipe` does not forward errors, and the SDK's own `'error'` listener now sits on the GUARD
   // rather than on the real stdin. Forward the real stream's faults to the same place the SDK would
   // have reported them, so a broken stdin is still visible rather than an unhandled `'error'`.
-  source.on("error", (error: Error) => transport.onerror?.(error));
+  source.on("error", (error: Error) => sdk.onerror?.(error));
   source.pipe(inbound);
 
-  return transport;
+  return signalled;
+}
+
+/**
+ * T-300 A-I.3/A-II.1/A-II.2 — THE CLOSE SIGNAL, as a transport decorator.
+ *
+ * WHY A WRAPPER AND NOT A HOOK. `serveStdio` OWNS the transport it is handed: it assigns
+ * `onmessage`/`onerror`/`onclose` on it, starts it, and closes it when the connection ends. So
+ * `mcp.ts` can no longer read `transport.onclose` to learn that the session is over — doing that
+ * would clobber the entry's own instance-teardown path. A hook wired into ONE close path (the
+ * guards' fatal trip, say) would answer only for that path and leave the others — SDK-internal
+ * teardown, a stdout error, a factory failure — hanging forever. Wrapping the object instead makes
+ * the signal TOTAL: every close, whoever initiates it, runs through this one seam.
+ *
+ * WHAT IS COMPOSED AND WHAT IS NOT. `onmessage`/`onerror` are pure pass-through ACCESSORS — the
+ * entry's handlers must reach the real transport untouched, and intercepting either would put a
+ * second, weaker copy of the framing contract in the path. Only `onclose` is composed, and only
+ * additively: the latch resolves first, then the entry's own handler runs, exactly once.
+ */
+class CloseSignallingTransport implements Transport {
+  private readonly delegate: Transport;
+  private readonly latch: () => void;
+  /** The entry's own teardown handler, as assigned through `onclose`. */
+  private downstream: (() => void) | undefined = undefined;
+  /** Guards the DOWNSTREAM handler at exactly-once — a stub delegate need not guard its own. */
+  private tornDown = false;
+
+  constructor(delegate: Transport, latch: () => void) {
+    this.delegate = delegate;
+    this.latch = latch;
+    // Subscribed ONCE, at construction, so no later `onclose` assignment can displace it.
+    this.delegate.onclose = (): void => {
+      if (this.tornDown) return;
+      this.tornDown = true;
+      this.latch();
+      this.downstream?.();
+    };
+  }
+
+  get onclose(): (() => void) | undefined {
+    return this.downstream;
+  }
+
+  set onclose(handler: (() => void) | undefined) {
+    this.downstream = handler;
+  }
+
+  get onmessage(): Transport["onmessage"] {
+    return this.delegate.onmessage;
+  }
+
+  set onmessage(handler: Transport["onmessage"]) {
+    this.delegate.onmessage = handler;
+  }
+
+  get onerror(): Transport["onerror"] {
+    return this.delegate.onerror;
+  }
+
+  set onerror(handler: Transport["onerror"]) {
+    this.delegate.onerror = handler;
+  }
+
+  get sessionId(): string | undefined {
+    return this.delegate.sessionId;
+  }
+
+  set sessionId(value: string | undefined) {
+    this.delegate.sessionId = value;
+  }
+
+  /** HTTP-only in practice (stdio leaves it undefined) — forwarded so the wrapper never LIES. */
+  get hasPerRequestStream(): boolean | undefined {
+    return this.delegate.hasPerRequestStream;
+  }
+
+  start(): Promise<void> {
+    return this.delegate.start();
+  }
+
+  send(message: JSONRPCMessage, options?: TransportSendOptions): Promise<void> {
+    return this.delegate.send(message, options);
+  }
+
+  /**
+   * The latch settles in a `finally`: a delegate whose `close()` REJECTS must still end the wait,
+   * or a failed teardown becomes a hang. The rejection still propagates to the caller — the entry's
+   * own close path tolerates it, and ours swallows it deliberately at the call site.
+   */
+  async close(): Promise<void> {
+    try {
+      await this.delegate.close();
+    } finally {
+      this.latch();
+    }
+  }
+
+  setProtocolVersion(version: string): void {
+    this.delegate.setProtocolVersion?.(version);
+  }
+
+  /** The member the D1 decorator rule exists for: dropped silently, with no type error. */
+  setSupportedProtocolVersions(versions: string[]): void {
+    this.delegate.setSupportedProtocolVersions?.(versions);
+  }
+}
+
+/**
+ * Wrap a transport so that EVERY close — ours, the serving entry's, the SDK's, a fatal guard trip,
+ * a stdout error — resolves one promise. `closed` never rejects: it is a signal, not an outcome.
+ *
+ * PRODUCTION NEVER CALLS THIS DIRECTLY: `createBoundedTransport` applies it at construction, which
+ * is what puts the guards' fatal hangup on the latched side of the seam. It stays exported for the
+ * unit cells that drive the decorator against a stub transport (`close-signal.test.ts`) — the
+ * rejecting-close and member-forwarding claims are the wrapper's own, and are cheapest to state
+ * where nothing else is in the frame.
+ */
+export function withCloseSignal(transport: Transport): {
+  readonly transport: Transport;
+  readonly closed: Promise<void>;
+} {
+  let resolveClosed!: () => void;
+  const closed = new Promise<void>((resolve) => {
+    resolveClosed = resolve;
+  });
+  return { transport: new CloseSignallingTransport(transport, () => resolveClosed()), closed };
 }

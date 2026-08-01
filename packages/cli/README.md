@@ -269,8 +269,9 @@ agkit mcp print-config
 The command writes nothing; `agkit setup` is what edits client configs. Machine-readable:
 `agkit mcp print-config --json`.
 
-The server implements MCP protocol revision **2025-11-25** and negotiates down to any
-earlier revision a client requests.
+The server implements MCP protocol revision **2026-07-28** (the `server/discover`
+handshake) and still serves the legacy `initialize` handshake, negotiating down to
+any earlier revision a client requests.
 
 ### Identity, credentials, and environment
 

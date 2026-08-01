@@ -30,6 +30,7 @@ import type { ManagementClient, RequestSpec } from "../../commands/types";
 import { CliLocalError, WireProblemError } from "../errors";
 import { evaluateSkew } from "../client/handshake";
 import { MANAGEMENT_CONTRACT_VERSION } from "../../contract";
+import { WORKFLOW_CONTRACT } from "../../workflow-contract";
 import { loadConfig } from "./config-file";
 import { discoverRepoProject } from "./repo-project";
 import { resolveContext, type ContextFlags, type ContextSource } from "./context";
@@ -92,6 +93,16 @@ export interface StatusData {
    * exactly when `pending_plans` is null.
    */
   pending_plans_truncated: boolean | null;
+  /**
+   * T-300 R6 — the workflow contract (`src/workflow-contract.ts`), the SAME five lines the MCP
+   * opening exchange carries as `instructions`. It rides the status document because the modern
+   * (2026-07-28) era lets a client skip `server/discover`, so the opening exchange is no longer a
+   * guaranteed delivery channel. This field does not restore that guarantee — it is skip-proof
+   * only for a client that follows line 1 of the contract ("Call `agkit_status` first"), which is
+   * the recommendation both carriers make. Authored HERE once for both surfaces: `agkit status
+   * --json` renders this array directly and the `agkit_status` tool passes it through.
+   */
+  workflow: string[];
 }
 
 /** What status returns: the data + an optional update notice to mirror to stderr (TTY). */
@@ -309,6 +320,11 @@ export async function assembleStatus(deps: StatusDeps, handshake?: HandshakeProb
     scopes: null,
     pending_plans: null,
     pending_plans_truncated: null,
+
+    // T-300 R6: the workflow contract, copied into a FRESH plain array. The spread matters — the
+    // MCP surface renders this document through `normalizeInert`, which accepts plain arrays only,
+    // and handing out the module-level constant would let a consumer mutate the one authored copy.
+    workflow: [...WORKFLOW_CONTRACT],
   };
 
   return { data, updateNotice: update.notice };

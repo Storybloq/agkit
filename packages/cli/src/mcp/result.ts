@@ -52,12 +52,12 @@
 // breaks the exact match and strands the secret's own prefix/suffix — KEYS between (b) and (c)
 // (`scrubSecretJsonKeys` says why); free text BEFORE the cap. An empty view returns SAME objects.
 //
-// SCHEMA-VALIDITY IS LOAD-BEARING (mcp.ts file-head): the SDK validates OUR result against
-// `CallToolResultSchema` and, on a mismatch, authors its OWN `-32602` error — which would travel to
-// the client WITHOUT passing through this chokepoint. `structuredContent` is a member of that
-// schema at SDK 1.30.0 (`z.record(z.string(), z.unknown())`, un-validated without an advertised
-// `outputSchema` — D0-D, which is why no `outputSchema` is advertised); everything else stays the
-// plainest possible valid shape: `{type:"text", text}` items plus `isError` on the infra path.
+// SCHEMA-VALIDITY IS LOAD-BEARING (mcp.ts file-head): the SDK validates OUR `tools/call` result
+// against the ERA CODEC and, on a mismatch, authors its OWN `-32602` — which would travel to the
+// client WITHOUT passing through this chokepoint (T-300: `Server._wrapHandler`, both eras).
+// `structuredContent` is a member of that schema in v2 as it was at 1.30.0 (a loose record,
+// un-validated without an advertised `outputSchema` — D0-D, which is why none is advertised);
+// everything else stays the plainest valid shape: `{type:"text", text}` items plus infra `isError`.
 //
 // TEXT ITEMS. A failure carries the one-line `[class] detail` summary an agent acts on, then — on a
 // DOMAIN refusal that HAS a hint — a `Hint: <command>` line from the CLI's own classifier, then the
@@ -68,7 +68,7 @@
 // can carry a path, a stack fragment or an unredacted local value, and it is never actionable to
 // the caller), and the embedded `plan` a `confirmation_required` halt carries (its `confirm_string`
 // is the very challenge the apply gate is refusing to hand over — see `tools.ts`).
-import { McpError, ErrorCode, type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import { ProtocolError, ProtocolErrorCode, type CallToolResult } from "@modelcontextprotocol/server";
 import type { CommandResult } from "../commands/types";
 import { buildSuccessEnvelope } from "../core/output/envelope";
 import { redact, redactText, containsSecretValue } from "../core/output/redaction";
@@ -786,15 +786,15 @@ function internalDiagnostic(err: unknown, suppressed: SuppressedSecrets): string
 
 /**
  * A PROTOCOL-level invalid-params fault (D0-g): input that does not satisfy the advertised branch
- * schema. It is an `McpError`, not a result — the call never happened, so there is nothing to
+ * schema. It is a `ProtocolError`, not a result — the call never happened, so there is nothing to
  * report as a tool outcome. The message is redacted + bounded like every other byte we emit,
  * because it echoes attacker-controlled input.
  */
-export function invalidParams(message: string): McpError {
-  return new McpError(ErrorCode.InvalidParams, displayCapped(redactText(message), MAX_SUMMARY_CHARS));
+export function invalidParams(message: string): ProtocolError {
+  return new ProtocolError(ProtocolErrorCode.InvalidParams, displayCapped(redactText(message), MAX_SUMMARY_CHARS));
 }
 
 /** The unknown-tool fault — the same shape the SDK's own tool host uses (mcp.ts precedent). */
-export function unknownTool(name: string): McpError {
-  return new McpError(ErrorCode.InvalidParams, `Tool ${displayCapped(redactText(name), 64)} not found`);
+export function unknownTool(name: string): ProtocolError {
+  return new ProtocolError(ProtocolErrorCode.InvalidParams, `Tool ${displayCapped(redactText(name), 64)} not found`);
 }

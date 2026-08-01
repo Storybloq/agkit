@@ -12,6 +12,13 @@
 // forever for a response that will never come. Owning both codes here is not a preference; it is the
 // only way either frame is ever emitted.
 //
+// T-300 (SDK v2) MOVES THE SILENCE FURTHER, NOT LESS FAR. `deserializeMessage` is byte-identical in
+// v2, but `ReadBuffer.readMessage` now SILENTLY CONSUMES a line whose `JSON.parse` throws
+// (`if (error instanceof SyntaxError) continue;`) — the SDK no longer even reports a malformed line
+// on `onerror`; it vanishes. Only schema failures still throw out. So our -32700 answer is now
+// strictly MORE honest than the SDK's behavior rather than merely more informative, and the framing
+// this file replicates is unchanged (re-verified against v2's `readMessage`).
+//
 // ── FRAMING MUST MATCH THE SDK BYTE FOR BYTE (the S2 grounding hazard) ────────────────────────────
 // This file does its OWN line splitting, and the SDK does its own again on whatever we forward. If
 // the two disagreed about where a line ends, a line we skipped but the SDK accepted would be a
@@ -35,7 +42,7 @@
 //     STRIPS the BOM — under which `﻿{"jsonrpc":…}` would parse HERE and be forwarded, only to
 //     throw inside the SDK, putting us back at silence for a line we said was fine.
 import { Transform, type TransformCallback } from "node:stream";
-import { JSONRPCMessageSchema } from "@modelcontextprotocol/sdk/types.js";
+import { JSONRPCMessageSchema } from "@modelcontextprotocol/core";
 
 /** The line delimiter, as the one byte `Buffer.indexOf('\n')` actually searches for. */
 const LF = 0x0a;

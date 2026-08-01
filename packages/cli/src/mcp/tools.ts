@@ -38,7 +38,7 @@
 // before any wire I/O when the credential chain is degraded. `agkit_status` is the instrument that
 // REPORTS that degradation, so it always answers — with a REPORT-mode version fence, for the same
 // reason its CLI twin has one: an instrument may not be killed by the thing it measures.
-import type { CallToolResult, ListToolsResult } from "@modelcontextprotocol/sdk/types.js";
+import type { CallToolResult, ListToolsResult } from "@modelcontextprotocol/server";
 import type { AnyCommandSpec, CommandResult, Ctx } from "../commands/types";
 import { RegistryError, commandKey, visibleCommands } from "../commands/registry";
 import { ConfirmationRequiredError, TerminalPlanError } from "../core/plan/ceremony";
@@ -436,6 +436,11 @@ async function runStatusTool(entry: DispatchEntry, input: unknown, call: McpCall
       scopes,
       account,
       kill_switch: killSwitch,
+      // T-300 R6: the workflow contract, a PASSTHROUGH of the shared producer
+      // (`core/config/status.ts`, which reads `src/workflow-contract.ts`) — never a second
+      // authoring site. Re-listing the lines here would let the tool's copy drift from the one
+      // `agkit status --json` and the opening exchange's `instructions` are built from.
+      workflow: base["workflow"] ?? null,
     },
   };
   // The status document is a SESSION report, not a secret carrier — and it still renders through
