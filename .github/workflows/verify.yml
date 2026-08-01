@@ -58,9 +58,13 @@ jobs:
             || { echo "src/commands/reserved must contain EXACTLY the generated stub"; exit 1; }
           grep -q 'PUBLIC-MIRROR STUB' packages/cli/src/commands/reserved/index.ts \
             || { echo "src/commands/reserved/index.ts is not the generated stub"; exit 1; }
-          if grep -rn 'AGKIT_SHIP_RESERVED' .github/ 2>/dev/null | grep -v 'never set' | grep -q .; then
-            echo "a workflow references AGKIT_SHIP_RESERVED — the mirror must never ship the reserved trees"
-            grep -rn 'AGKIT_SHIP_RESERVED' .github/ || true
+          # The flag may be MENTIONED (this guard's own lines, prose) but never SET. A set is the
+          # name immediately followed by ':' (YAML env) or '=' (shell); mention-only lines cannot
+          # match, so this guard is structurally self-clean (the previous 'never set' word-filter
+          # matched its own echo/diagnostic lines and failed every push since v0.0.1).
+          if grep -rnE 'AGKIT_SHIP_RESERVED[[:space:]]*[:=]' .github/ 2>/dev/null | grep -q .; then
+            echo "a workflow SETS AGKIT_SHIP_RESERVED — the mirror must never ship the reserved trees"
+            grep -rnE 'AGKIT_SHIP_RESERVED[[:space:]]*[:=]' .github/ || true
             exit 1
           fi
 
