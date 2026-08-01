@@ -1,0 +1,16 @@
+{
+  "name": "agkit-public-mirror",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.3",
+  "engines": {
+    "node": ">=22"
+  },
+  "pnpm": {
+    "overrides": {
+      "tsup": "8.5.1",
+      "typescript": "6.0.3",
+      "esbuild": "0.28.1"
+    }
+  }
+}

@@ -1,0 +1,294 @@
+# =============================================================================
+# release.yml — npm publish with provenance, from the PUBLIC MIRROR (T-228 §8)
+# =============================================================================
+# GENERATED into the public mirror at `.github/workflows/release.yml` by the
+# PRIVATE repo's `scripts/mirror-sync.mjs`. Do not hand-edit it here: the sync
+# deletes strays and rewrites this file on every run. Change it in the private
+# repo at `scripts/mirror-templates/workflows/release.yml`, then re-sync.
+#
+# THE OWNER GATE IS DOUBLE (§B-12). The trigger is a `v*` tag push, and the tag
+# protection makes the owner the sole writer; the job then sits in the `release`
+# environment whose required reviewer is the owner. Neither half is decorative:
+# an accidental tag cannot publish, and an approved run cannot publish something
+# the private repo did not pre-attest.
+#
+# THE ONE-TARBALL RULE (AMENDMENT CX-2 — the load-bearing invariant here).
+# The tarball is packed EXACTLY ONCE, into $VERIFIED_TGZ. Every later step reads
+# that same file: the byte verification, the whitelist assertion, the cold smoke
+# (from a COPY, so the artifact itself is never touched), and finally
+# `npm publish "$VERIFIED_TGZ"`. Its sha256 is recorded at pack time and
+# re-asserted in the publish step itself. A workflow that re-packs between verify
+# and publish verifies one artifact and ships another; that seam is the whole
+# reason the verification exists, so it is closed by construction rather than by
+# reviewer discipline.
+#
+# `--ignore-scripts` ON PUBLISH is not a shortcut. `prepublishOnly` is
+# `prepublish-guard && pnpm build && pnpm test`, and `pnpm test` is `vitest run`
+# over a suite the mirror deliberately does not carry (the tests stay
+# authoritative in the private monorepo's CI, on these same bytes, transferred by
+# the byte gate). The guard and the build are therefore run as EXPLICIT steps
+# above, and the lifecycle is suppressed at publish so the published bytes are
+# provably the verified bytes. `prepublishOnly` remains in the manifest as the
+# laptop footgun-guard it was written to be.
+#
+# ACTION PINS. The three `uses:` SHAs below are carried verbatim from the private
+# monorepo's `.github/workflows/ci.yml`, so the mirror builds on the same action
+# bytes the private CI does. TODO(owner, at mirror creation): re-verify each SHA
+# against its upstream tag before the first release, and re-pin on every bump —
+# a pinned SHA is only as good as the day someone last looked at it.
+# =============================================================================
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Rehearse everything through pack + verify + smoke and stop before the real publish."
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "24"
+  PKG: "@shyegg/agkit"
+
+jobs:
+  publish:
+    name: npm publish (provenance)
+    runs-on: ubuntu-latest
+    # Required reviewer: the owner. This is the in-CI half of the double gate.
+    environment: release
+    permissions:
+      contents: read
+      # OIDC token for npm provenance. Without it `--provenance` cannot attest.
+      id-token: write
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Resolve + assert the release version
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "push" ]; then
+            V="${GITHUB_REF_NAME#v}"
+          else
+            V="$(node -p 'require("./RELEASE_EXPECT.json").version')"
+            echo "workflow_dispatch: version taken from RELEASE_EXPECT.json ($V)"
+          fi
+          echo "V=$V" >> "$GITHUB_ENV"
+          node -e '
+            const fs = require("node:fs");
+            const v = process.argv[1];
+            const expect = JSON.parse(fs.readFileSync("RELEASE_EXPECT.json", "utf8"));
+            const pkg = JSON.parse(fs.readFileSync("packages/cli/package.json", "utf8"));
+            const bad = [];
+            if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(v)) bad.push(`tag version ${v} is not an exact semver`);
+            if (expect.version !== v) bad.push(`RELEASE_EXPECT.json version ${expect.version} != ${v}`);
+            if (pkg.version !== v) bad.push(`packages/cli/package.json version ${pkg.version} != ${v}`);
+            if (bad.length) { console.error("release refused:\n  " + bad.join("\n  ")); process.exit(1); }
+            console.log(`version ${v} agrees across the tag, RELEASE_EXPECT.json and the manifest`);
+          ' "$V"
+
+      - name: Assert the provenance preconditions the manifest must carry
+        # npm binds the provenance attestation to the manifest `repository.url` and
+        # refuses (or degrades) without it. Failing HERE names the missing owner
+        # decision instead of surfacing it as an opaque publish error.
+        run: |
+          set -euo pipefail
+          node -e '
+            const pkg = require("./packages/cli/package.json");
+            const url = pkg.repository && (typeof pkg.repository === "string" ? pkg.repository : pkg.repository.url);
+            if (!url) {
+              console.error(
+                "release refused: packages/cli/package.json has no `repository` field. npm provenance binds\n" +
+                "the attestation to the source repo named there; add it in the PRIVATE monorepo (it is inside\n" +
+                "the byte-matched manifest) and re-sync the mirror. See PUBLISHING.md."
+              );
+              process.exit(1);
+            }
+            if (pkg.publishConfig?.provenance !== true || pkg.publishConfig?.access !== "public") {
+              console.error("release refused: publishConfig must be { access: \"public\", provenance: true }.");
+              process.exit(1);
+            }
+            console.log(`repository ${url}`);
+          '
+
+      - name: Guard + release build
+        working-directory: packages/cli
+        run: |
+          set -euo pipefail
+          AGKIT_RELEASE_VERSION="$V" node scripts/prepublish-guard.mjs
+          AGKIT_RELEASE_VERSION="$V" pnpm build
+
+      - name: Pack ONCE — the artifact every later step reads (CX-2)
+        working-directory: packages/cli
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/release"
+          # --ignore-scripts: nothing may mutate dist between the build above and
+          # the bytes we are about to attest.
+          tgz="$(npm pack --silent --ignore-scripts --pack-destination "$RUNNER_TEMP/release")"
+          verified="$RUNNER_TEMP/release/$tgz"
+          sha="$(sha256sum "$verified" | awk '{print $1}')"
+          echo "VERIFIED_TGZ=$verified" >> "$GITHUB_ENV"
+          echo "VERIFIED_SHA256=$sha" >> "$GITHUB_ENV"
+          echo "packed $verified"
+          echo "sha256 $sha"
+
+      - name: Byte-verify the packed tarball against RELEASE_EXPECT.json (§7 leg 2)
+        run: node .github/verify-expect.mjs "$VERIFIED_TGZ" RELEASE_EXPECT.json
+
+      - name: Pack whitelist — asserted over the VERIFIED tarball, never a second pack
+        run: |
+          set -euo pipefail
+          files="$(tar -tzf "$VERIFIED_TGZ" | sed -n 's#^package/##p' | grep -v '/$' | sort)"
+          printf '%s\n' "$files"
+          for anchor in 'dist/cli.js' 'README.md' 'package.json'; do
+            printf '%s\n' "$files" | grep -qx "$anchor" \
+              || { echo "tarball is missing required anchor: $anchor"; exit 1; }
+          done
+          printf '%s\n' "$files" | grep -q '^skill/' || { echo "tarball ships no skill/ tree"; exit 1; }
+          bad="$(printf '%s\n' "$files" | grep -vE '^(dist/.+|skill/.+|README\.md|LICENSE|package\.json)$' || true)"
+          if [ -n "$bad" ]; then echo "unexpected tarball files:"; printf '%s\n' "$bad"; exit 1; fi
+
+      - name: Cold smoke — global install of a COPY of the verified tarball
+        # A copy, so the artifact that gets published is never opened by the smoke.
+        # AGKIT_API_URL is pinned to a DEAD loopback port so the enriched `version`
+        # probe stays hermetic: server_reachable:false, still exit 0.
+        run: |
+          set -euo pipefail
+          smoke="$RUNNER_TEMP/smoke"
+          rm -rf "$smoke" && mkdir -p "$smoke"
+          cp "$VERIFIED_TGZ" "$smoke/candidate.tgz"
+          npm install -g --prefix "$smoke/pfx" "$smoke/candidate.tgz" >/dev/null
+          out="$(AGKIT_API_URL='http://127.0.0.1:9' AGKIT_API_URL_CONFIRMED='127.0.0.1:9' "$smoke/pfx/bin/agkit" version)"
+          printf '%s\n' "$out"
+          printf '%s\n' "$out" | node -e '
+            const o = JSON.parse(require("node:fs").readFileSync(0, "utf8"));
+            const want = process.env.V;
+            if (!(typeof o.version === "number" && o.data && o.data.version === want && o.error === undefined)) {
+              console.error(`expected {version,data:{version:"${want}"}}; got ` + JSON.stringify(o));
+              process.exit(1);
+            }
+            console.log(`cold smoke OK — packed bin shim reports ${want}`);
+          '
+
+      - name: Idempotent pre-publish lookup (CX-12)
+        # A re-run must be safe. If this exact version is ALREADY on npm we skip the
+        # publish — but ONLY when the registry's integrity for it equals our verified
+        # tarball's. A published version whose bytes differ from what we just attested
+        # is a HARD REFUSAL, never a skip and never an overwrite: npm versions are
+        # immutable, so the only honest responses are stop-and-investigate, then
+        # `npm deprecate` + a patch bump.
+        run: |
+          set -euo pipefail
+          integrity="sha512-$(openssl dgst -sha512 -binary "$VERIFIED_TGZ" | openssl base64 -A)"
+          echo "candidate integrity $integrity"
+          view_rc=0
+          npm view "$PKG@$V" --json > "$RUNNER_TEMP/npmview.json" 2> "$RUNNER_TEMP/npmview.err" || view_rc=$?
+          if [ "$view_rc" -ne 0 ]; then
+            if grep -qE 'E404|code.*404' "$RUNNER_TEMP/npmview.err" "$RUNNER_TEMP/npmview.json"; then
+              echo "ALREADY_PUBLISHED=no" >> "$GITHUB_ENV"
+              echo "$PKG@$V is not on the registry — proceeding to publish"
+              exit 0
+            fi
+            echo "npm view failed for a reason other than 404 — refusing to guess:"
+            cat "$RUNNER_TEMP/npmview.err"
+            exit 1
+          fi
+          # `npm view <pkg>@<missing-version>` exits 0 with EMPTY output once the
+          # PACKAGE exists (only an unknown package is an E404), so an empty or
+          # null document means "this version is not published" — not "no integrity".
+          published="$(node -e '
+            const fs = require("node:fs");
+            const raw = fs.readFileSync(process.argv[1], "utf8").trim();
+            if (raw === "" || raw === "null" || raw === "{}") { console.log("__ABSENT__"); process.exit(0); }
+            const doc = JSON.parse(raw);
+            const rec = Array.isArray(doc) ? doc[doc.length - 1] : doc;
+            console.log(rec && rec.dist && rec.dist.integrity ? rec.dist.integrity : "");
+          ' "$RUNNER_TEMP/npmview.json")"
+          if [ "$published" = "__ABSENT__" ]; then
+            echo "ALREADY_PUBLISHED=no" >> "$GITHUB_ENV"
+            echo "$PKG@$V is not on the registry (package exists, version does not) — proceeding to publish"
+            exit 0
+          fi
+          echo "published integrity ${published:-<none>}"
+          if [ -z "$published" ]; then
+            echo "$PKG@$V exists on the registry but reports no dist.integrity — refusing to adjudicate blind."
+            exit 1
+          fi
+          if [ "$published" = "$integrity" ]; then
+            echo "ALREADY_PUBLISHED=yes" >> "$GITHUB_ENV"
+            echo "$PKG@$V is already published with byte-identical contents — skipping the publish step."
+            exit 0
+          fi
+          echo "REFUSING TO PUBLISH: $PKG@$V already exists on npm with DIFFERENT bytes."
+          echo "  registry integrity : $published"
+          echo "  candidate integrity: $integrity"
+          echo "npm versions are immutable. Investigate, then deprecate + patch-bump; never republish."
+          exit 1
+
+      - name: Re-assert the artifact digest immediately before publish (CX-2)
+        if: env.ALREADY_PUBLISHED != 'yes'
+        run: |
+          set -euo pipefail
+          now="$(sha256sum "$VERIFIED_TGZ" | awk '{print $1}')"
+          if [ "$now" != "$VERIFIED_SHA256" ]; then
+            echo "REFUSING TO PUBLISH: $VERIFIED_TGZ changed after verification."
+            echo "  verified: $VERIFIED_SHA256"
+            echo "  now     : $now"
+            exit 1
+          fi
+          echo "artifact digest unchanged since verification: $now"
+
+      - name: Publish to npm with provenance
+        if: ${{ env.ALREADY_PUBLISHED != 'yes' && (github.event_name == 'push' || !inputs.dry_run) }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # THE IRREVERSIBILITY BOUNDARY. Publishes the verified file BY PATH — no
+        # re-pack, no working-directory pack, no lifecycle scripts.
+        run: npm publish "$VERIFIED_TGZ" --provenance --access public --ignore-scripts
+
+      - name: Publish REHEARSAL (dry run)
+        if: ${{ env.ALREADY_PUBLISHED != 'yes' && github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "dry_run: everything above ran for real; the publish below is --dry-run."
+          npm publish "$VERIFIED_TGZ" --provenance --access public --ignore-scripts --dry-run
+
+      - name: Post-publish witness (§7 leg 3)
+        # Fetch the tarball BACK from the registry and re-verify it against the same
+        # manifest. Non-blocking for the publish (it already happened) but loud: a
+        # mismatch here means the registry holds bytes we never attested.
+        if: ${{ github.event_name == 'push' || !inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          url="$(npm view "$PKG@$V" dist.tarball)"
+          curl -fsSL "$url" -o "$RUNNER_TEMP/published.tgz"
+          echo "fetched $url"
+          echo "published sha256 $(sha256sum "$RUNNER_TEMP/published.tgz" | awk '{print $1}')"
+          node .github/verify-expect.mjs "$RUNNER_TEMP/published.tgz" RELEASE_EXPECT.json
+
+      - name: Next step is MANUAL — the MCP registry half
+        if: ${{ github.event_name == 'push' || !inputs.dry_run }}
+        run: |
+          echo "npm half complete for $PKG@$V."
+          echo
+          echo "The MCP registry publish is deliberately NOT automated: the Ed25519 domain-proof key"
+          echo "authorizes publishing anything under cloud.agkit/*, so it lives in owner custody and"
+          echo "never in a CI secret. From the owner machine (NTP-synced):"
+          echo "  1. mcp-publisher login dns"
+          echo "  2. rehearse against staging.registry.modelcontextprotocol.io (it fetches THIS npm version)"
+          echo "  3. mcp-publisher publish   # production, with packages/cli/server.json"

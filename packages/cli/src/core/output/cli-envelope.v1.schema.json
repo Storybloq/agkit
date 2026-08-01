@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.agkit.cloud/cli/v1/envelope.schema.json",
+  "title": "agkit CLI output envelope, version 1",
+  "description": "The CLI-OWNED wire envelope every `agkit` machine-mode document is (T-205 deliverable 2, T-225 C-S5). It is NOT the management-plane contract: `packages/shared/contract/**` is frozen, immutable and owns the server wire; this document owns the shape the CLI itself mints around whatever the server said, and it is versioned by `ENVELOPE_VERSION` (packages/cli/src/contract.ts), not by `management_version`. AUTHORED SOURCE OF TRUTH, NOT A GOLDEN: no generator emits it, no regen script owes it, and it must never be derived from `src/core/output/serialize.ts` or `envelope.ts` — a schema generated from the serializer could not detect the serializer drifting, which is the whole reason this file exists. Its drift teeth are `envelope-schema.test.ts` (C-S7), which binds every const and every property name here back to those two modules by a DIFFERENT mechanism (a source-text read) than the one that produced them. RECORDED RESIDUAL (T-225 B5.8 / R10): the `$id` host `schemas.agkit.cloud` publishes NO documents — this URL resolves to nothing today. The URL is kept deliberately, because it is the same naming grammar every `outputSchemaId` in the command registry already mints (`https://schemas.agkit.cloud/cli/v1/{noun}.{verb}.output.json`), and inventing a second, non-URL identity scheme for this one document would fork that grammar rather than repair it. Closure paths, both owner decisions and neither taken here: publish a CLI schema bundle at that host, or demote the whole family to opaque identifiers. Cross-ref T-228.",
+  "oneOf": [
+    { "$ref": "#/$defs/success" },
+    { "$ref": "#/$defs/error" }
+  ],
+  "$defs": {
+    "success": {
+      "title": "success envelope",
+      "description": "Minted by `buildSuccessEnvelope` (envelope.ts). CLOSED: the discriminator against the error member is the PRESENCE of `data` versus `error`, never an `ok` boolean, and closedness on both branches is what makes that discrimination total — an object carrying both keys matches NEITHER branch, so the root `oneOf` fails it. Mutual exclusivity is therefore a consequence of this keyword, not a separate rule.",
+      "type": "object",
+      "required": ["version", "data"],
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "description": "The envelope-schema version. MUST equal `ENVELOPE_VERSION` in packages/cli/src/contract.ts; C-S7 asserts that binding, so bumping one without the other reddens.",
+          "const": 1
+        },
+        "data": {
+          "description": "The handler payload — ANY JSON value, including null (`mcp serve` returns `{ data: null }`). Deliberately unconstrained: the CLI does not own the shape of management DTOs, the frozen contract does. Annotation-only, so it asserts nothing."
+        },
+        "warnings": {
+          "description": "Non-fatal notices carried alongside a successful payload. Present only when non-empty (envelope.ts omits the key for an empty array).",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "partial": {
+          "description": "A truncated page. DERIVED by `buildSuccessEnvelope` from an explicit `meta.partial` or the presence of `meta.next_cursor`, and lifted to a top-level envelope fact — it is never a passthrough `meta` key. `true` is the only legal value: the key is absent otherwise, never `false`. This is the envelope side of exit 3.",
+          "const": true
+        },
+        "meta": {
+          "description": "Contract facts (`envelope_version` / `management_version`) or pagination facts (`next_cursor`). Present only when non-empty, and never carrying `partial` or the shown-once control marker — the serializer deletes both.",
+          "type": "object"
+        }
+      }
+    },
+    "error": {
+      "title": "error envelope",
+      "description": "Minted by `buildErrorEnvelope` (envelope.ts). CLOSED at the top level for the same discrimination reason as the success member; the inner `error` object is deliberately OPEN — see its own description.",
+      "type": "object",
+      "required": ["version", "error"],
+      "additionalProperties": false,
+      "properties": {
+        "version": {
+          "description": "The envelope-schema version. Same binding to `ENVELOPE_VERSION` as the success member's.",
+          "const": 1
+        },
+        "error": {
+          "description": "OPEN on purpose (`additionalProperties: true`), and this is not laziness: `ErrorEnvelope[\"error\"]` in envelope.ts carries an index signature `[key: string]: unknown` for teachable extras — `available_fields` on `unknown_field`, and its siblings. Closing this object would make every future teachable extra a schema edit, and would reject documents the shipped CLI emits today. C-S7 asserts the bijection: this `true` holds exactly while that index signature exists.",
+          "type": "object",
+          "required": ["code", "message"],
+          "additionalProperties": true,
+          "properties": {
+            "code": {
+              "description": "The stable machine code a consumer branches on.",
+              "type": "string"
+            },
+            "message": {
+              "description": "Human prose. Never load-bearing for a consumer.",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

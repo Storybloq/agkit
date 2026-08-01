@@ -1,0 +1,32 @@
+{
+  "family": "partial",
+  "purpose": "BOTH constructions of `partial: true` (B10 item 16). A: an explicit `meta.partial` from a handler, with NO `meta.next_cursor`. B: a truncated page, where `partial` is DERIVED from the cursor (envelope.ts:85-91). Both exit 3, and neither rides the diagnostic-verdict override.",
+  "cases": [
+    {
+      "name": "setup apply run with legs the CLI cannot finish",
+      "argv": [],
+      "provenance": "HANDLER-LEVEL (plan D open item 5, ratified by R12): the real `setupRun` handler over fully virtual seams, then buildSuccessEnvelope + renderEnvelope — emitSuccess's own composition. `run()` cannot drive it: installFs / argv1 / pid are not RunOverrides members, so a shell run would write to a real HOME and put the test-runner binary path and a live pid in the bytes.",
+      "rendered": {
+        "stdout": "{\n  \"version\": 1,\n  \"data\": {\n    \"check\": false,\n    \"legs\": [\n      {\n        \"path\": \"/agkit-golden/user/.claude/skills/agkit\",\n        \"leg\": \"skill\",\n        \"status\": \"refused\",\n        \"detail\": \"/agkit-golden/user/.claude/skills/agkit: the skill tree could not be installed — re-run `agkit setup`\"\n      },\n      {\n        \"path\": \"/agkit-golden/user/.claude.json\",\n        \"registered\": false,\n        \"scope\": \"user\",\n        \"command\": \"claude mcp add agkit -s user -- /agkit-golden/bin/agkit mcp serve\",\n        \"leg\": \"claude_mcp\",\n        \"status\": \"manual\",\n        \"detail\": \"/agkit-golden/user/.claude.json: no `claude` binary on PATH — register it by hand\"\n      },\n      {\n        \"path\": \"/agkit-golden/repo/AGENTS.md\",\n        \"resolved_path\": \"/agkit-golden/repo/AGENTS.md\",\n        \"leg\": \"agents_md\",\n        \"status\": \"done\",\n        \"detail\": \"/agkit-golden/repo/AGENTS.md: the agkit block was written\"\n      },\n      {\n        \"leg\": \"codex\",\n        \"status\": \"skipped\",\n        \"detail\": \"not requested — pass `--client codex` to register with Codex too\"\n      }\n    ],\n    \"changed_count\": 1\n  },\n  \"warnings\": [\n    \"`agkit setup` could not finish every step — the rest is listed below and needs you\",\n    \"/agkit-golden/user/.claude/skills/agkit: the skill tree could not be installed — re-run `agkit setup`\",\n    \"/agkit-golden/user/.claude.json: no `claude` binary on PATH — register it by hand\"\n  ],\n  \"partial\": true\n}\n",
+        "stderr": "",
+        "exitCode": 3
+      }
+    },
+    {
+      "name": "project list, a truncated page",
+      "argv": [
+        "project",
+        "list",
+        "--json",
+        "--retries",
+        "0"
+      ],
+      "provenance": "management-project.list.response.json AS COMMITTED (has_more:true + its cursor), apart from the opaque-run transform. `singlePageResult` surfaces meta.next_cursor (paginate.ts:325-332), buildSuccessEnvelope derives partial:true from it, and the chokepoint mints exit 3.",
+      "rendered": {
+        "stdout": "{\n  \"version\": 1,\n  \"data\": [\n    {\n      \"object\": \"project\",\n      \"id\": \"00000000-0000-4000-b000-00000000900d\",\n      \"name\": \"golden-contract\",\n      \"created_at\": \"2026-07-15T01:12:45.480Z\",\n      \"app_attest_app_id\": null,\n      \"app_attest_environment\": \"production\"\n    }\n  ],\n  \"partial\": true,\n  \"meta\": {\n    \"next_cursor\": \"MjAyNi0wNy0xNVQwMToxMjo0NS40ODBa\"\n  }\n}\n",
+        "stderr": "",
+        "exitCode": 3
+      }
+    }
+  ]
+}

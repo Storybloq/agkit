@@ -1,0 +1,6334 @@
+{
+  "$schema": "https://schemas.agkit.cloud/cli/v1/reference.json",
+  "generator": "agkit reference --json",
+  "count": 123,
+  "commands": [
+    {
+      "command": "version get",
+      "noun": "version",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Print the agkit CLI version.",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/version.get.output.json",
+      "examples": [
+        "agkit version"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "whoami get",
+      "noun": "whoami",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Report the active agkit credential (local source, enriched with the server identity when reachable).",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/whoami.get.output.json",
+      "examples": [
+        "agkit whoami"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "status get",
+      "noun": "status",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Report the local session: auth, effective context + sources, config, update notice.",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/status.get.output.json",
+      "examples": [
+        "agkit status"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "config list",
+      "noun": "config",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the registered config keys with their current values.",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/config.list.output.json",
+      "examples": [
+        "agkit config list"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "config get",
+      "noun": "config",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Read one config key.",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/config.get.output.json",
+      "examples": [
+        "agkit config get --key api_url"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The config key to read."
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "config set",
+      "noun": "config",
+      "verb": "set",
+      "aliases": [],
+      "summary": "Set one config key (validated per its type).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/config.set.output.json",
+      "examples": [
+        "agkit config set --key color --value never"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The config key to set."
+          },
+          "value": {
+            "type": "string",
+            "description": "The new value (validated per the key's type)."
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "config unset",
+      "noun": "config",
+      "verb": "unset",
+      "aliases": [],
+      "summary": "Remove one config key (revert to its built-in default).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/config.unset.output.json",
+      "examples": [
+        "agkit config unset --key api_url"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The config key to remove."
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "profile list",
+      "noun": "profile",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List known profiles (with the active one marked).",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/profile.list.output.json",
+      "examples": [
+        "agkit profile list"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "profile show",
+      "noun": "profile",
+      "verb": "show",
+      "aliases": [],
+      "summary": "Show one profile's defaults + credential presence.",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/profile.show.output.json",
+      "examples": [
+        "agkit profile show",
+        "agkit profile show --name staging"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Profile to show (defaults to the active profile).",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "profile use",
+      "noun": "profile",
+      "verb": "use",
+      "aliases": [],
+      "summary": "Make a profile the active default.",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/profile.use.output.json",
+      "examples": [
+        "agkit profile use --name staging"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Profile to make active."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "profile rename",
+      "noun": "profile",
+      "verb": "rename",
+      "aliases": [],
+      "summary": "Rename a profile (migrates its config + credential).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/profile.rename.output.json",
+      "examples": [
+        "agkit profile rename --old dev --new staging"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "old": {
+            "type": "string",
+            "description": "Current profile name."
+          },
+          "new": {
+            "type": "string",
+            "description": "New profile name."
+          }
+        },
+        "required": [
+          "old",
+          "new"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "profile delete",
+      "noun": "profile",
+      "verb": "delete",
+      "aliases": [],
+      "summary": "Delete a profile (removes its keychain entry + config).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/profile.delete.output.json",
+      "examples": [
+        "agkit profile delete --name staging"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Profile to delete."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "project list",
+      "noun": "project",
+      "verb": "list",
+      "aliases": [
+        "ls"
+      ],
+      "summary": "List projects.",
+      "scopes": [
+        "projects:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.list.output.json",
+      "examples": [
+        "agkit project list",
+        "agkit project list --limit 50"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Max rows to return.",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_project_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "projects:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.list.output.json"
+      }
+    },
+    {
+      "command": "project get",
+      "noun": "project",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show a project (defaults to the effective project).",
+      "scopes": [
+        "projects:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.get.output.json",
+      "examples": [
+        "agkit project get proj_123",
+        "agkit project get"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Project id (defaults to the effective project).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_project_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "projects:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.get.output.json"
+      }
+    },
+    {
+      "command": "project summary",
+      "noun": "project",
+      "verb": "summary",
+      "aliases": [],
+      "summary": "Show a project's resource summary (defaults to the effective project).",
+      "scopes": [
+        "projects:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.summary.output.json",
+      "examples": [
+        "agkit project summary",
+        "agkit project summary proj_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Project id (defaults to the effective project).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_project_read",
+        "verb": "summary",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "projects:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.summary.output.json"
+      }
+    },
+    {
+      "command": "project create",
+      "noun": "project",
+      "verb": "create",
+      "aliases": [],
+      "summary": "Create a project.",
+      "scopes": [
+        "projects:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.create.output.json",
+      "examples": [
+        "agkit project create --name Acme"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "Human-readable project name."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (only needed if the server plan is destructive/prod-rebinding).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "prompts": [
+        {
+          "name": "name",
+          "message": "Project name",
+          "flagEquivalent": "--name"
+        }
+      ],
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_project_plan",
+        "verb": "create",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "projects:write"
+        ],
+        "danger": "M",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.create.output.json"
+      }
+    },
+    {
+      "command": "project rename",
+      "noun": "project",
+      "verb": "rename",
+      "aliases": [],
+      "summary": "Rename a project.",
+      "scopes": [
+        "projects:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.rename.output.json",
+      "examples": [
+        "agkit project rename proj_123 --name NewName"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project id to rename."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "The new project name."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (only needed if the server plan is destructive/prod-rebinding).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_project_plan",
+        "verb": "rename",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "projects:write"
+        ],
+        "danger": "M",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.rename.output.json"
+      }
+    },
+    {
+      "command": "project archive",
+      "noun": "project",
+      "verb": "archive",
+      "aliases": [],
+      "summary": "Archive a project (bricks its apps — destructive).",
+      "scopes": [
+        "projects:destroy"
+      ],
+      "danger": "D",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.archive.output.json",
+      "examples": [
+        "agkit project archive proj_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project id to archive."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_project_plan",
+        "verb": "archive",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "projects:destroy"
+        ],
+        "danger": "D",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/project.archive.output.json"
+      }
+    },
+    {
+      "command": "issuer list",
+      "noun": "issuer",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the project's trusted issuers.",
+      "scopes": [
+        "issuers:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.list.output.json",
+      "examples": [
+        "agkit issuer list"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_issuer_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "issuers:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.list.output.json"
+      }
+    },
+    {
+      "command": "issuer get",
+      "noun": "issuer",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show a trusted issuer.",
+      "scopes": [
+        "issuers:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.get.output.json",
+      "examples": [
+        "agkit issuer get iss_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Trusted-issuer id."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_issuer_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "issuers:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.get.output.json"
+      }
+    },
+    {
+      "command": "issuer create",
+      "noun": "issuer",
+      "verb": "create",
+      "aliases": [],
+      "summary": "Add a trusted issuer (prod-rebinding).",
+      "scopes": [
+        "issuers:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.create.output.json",
+      "examples": [
+        "agkit issuer create --kind apple --audience api.agkit.cloud",
+        "agkit issuer create --kind firebase --firebase-project-id acme-prod",
+        "agkit issuer create --kind custom_jwks --issuer https://id.acme.com --audience api.agkit.cloud --jwks-uri https://id.acme.com/.well-known/jwks.json"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "apple"
+              },
+              "audience": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Expected audience (the `aud` claim) for Apple identity tokens."
+              },
+              "confirm": {
+                "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "kind",
+              "audience"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "firebase"
+              },
+              "firebase-project-id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The Firebase project id whose tokens to trust."
+              },
+              "confirm": {
+                "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "kind",
+              "firebase-project-id"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "custom_jwks"
+              },
+              "jwks-uri": {
+                "type": "string",
+                "minLength": 1,
+                "description": "JWKS endpoint publishing the issuer's signing keys."
+              },
+              "issuer": {
+                "type": "string",
+                "format": "uri",
+                "description": "Issuer URL (the `iss` claim to trust)."
+              },
+              "audience": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Expected audience for tokens from this issuer."
+              },
+              "confirm": {
+                "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "kind",
+              "jwks-uri",
+              "issuer",
+              "audience"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "custom_public_key"
+              },
+              "public-key": {
+                "type": "string",
+                "minLength": 1,
+                "description": "PEM/SPKI public key for single-key token verification."
+              },
+              "issuer": {
+                "type": "string",
+                "format": "uri",
+                "description": "Issuer URL (the `iss` claim to trust)."
+              },
+              "audience": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Expected audience for tokens from this issuer."
+              },
+              "algorithm": {
+                "description": "Signing algorithm for the public key (server defaults RS256 when omitted).",
+                "type": "string",
+                "enum": [
+                  "RS256",
+                  "ES256",
+                  "EdDSA"
+                ]
+              },
+              "confirm": {
+                "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "kind",
+              "public-key",
+              "issuer",
+              "audience"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_issuer_plan",
+        "verb": "create",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "issuers:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.create.output.json"
+      }
+    },
+    {
+      "command": "issuer update",
+      "noun": "issuer",
+      "verb": "update",
+      "aliases": [],
+      "summary": "Update a trusted issuer's config (kind is immutable; prod-rebinding).",
+      "scopes": [
+        "issuers:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.update.output.json",
+      "examples": [
+        "agkit issuer update iss_123 --audience api.agkit.cloud"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Trusted-issuer id to update."
+          },
+          "issuer": {
+            "description": "Issuer URL (the `iss` claim to trust).",
+            "type": "string",
+            "minLength": 1
+          },
+          "jwks-uri": {
+            "description": "JWKS endpoint publishing the issuer's signing keys.",
+            "type": "string"
+          },
+          "audience": {
+            "description": "Expected audience for tokens from this issuer.",
+            "type": "string"
+          },
+          "firebase-project-id": {
+            "description": "The Firebase project id whose tokens to trust.",
+            "type": "string",
+            "minLength": 1
+          },
+          "public-key": {
+            "description": "PEM/SPKI public key for single-key token verification.",
+            "type": "string",
+            "minLength": 1
+          },
+          "algorithm": {
+            "description": "Signing algorithm for the public key.",
+            "type": "string",
+            "enum": [
+              "RS256",
+              "ES256",
+              "EdDSA"
+            ]
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_issuer_plan",
+        "verb": "update",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "issuers:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.update.output.json"
+      }
+    },
+    {
+      "command": "issuer delete",
+      "noun": "issuer",
+      "verb": "delete",
+      "aliases": [],
+      "summary": "Delete a trusted issuer (locks out its end-users — destructive, prod-rebinding).",
+      "scopes": [
+        "issuers:destroy"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.delete.output.json",
+      "examples": [
+        "agkit issuer delete iss_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Trusted-issuer id to delete."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_issuer_plan",
+        "verb": "delete",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "issuers:destroy"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/issuer.delete.output.json"
+      }
+    },
+    {
+      "command": "plan list",
+      "noun": "plan",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List plans (most recent first).",
+      "scopes": [
+        "plans:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/plan.list.output.json",
+      "examples": [
+        "agkit plan list",
+        "agkit plan list --limit 50"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Max rows to return.",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_plan_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "plans:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/plan.list.output.json"
+      }
+    },
+    {
+      "command": "plan show",
+      "noun": "plan",
+      "verb": "show",
+      "aliases": [],
+      "summary": "Show a plan (its diff, danger, confirm string, and expiry).",
+      "scopes": [
+        "plans:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/plan.show.output.json",
+      "examples": [
+        "agkit plan show plan_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The plan id to inspect."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_plan_read",
+        "verb": "show",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "plans:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/plan.show.output.json"
+      }
+    },
+    {
+      "command": "plan discard",
+      "noun": "plan",
+      "verb": "discard",
+      "aliases": [],
+      "summary": "Discard an open plan (zero side effects on managed state).",
+      "scopes": [
+        "plans:read"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/plan.discard.output.json",
+      "examples": [
+        "agkit plan discard plan_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The open plan id to discard."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "plan apply",
+      "noun": "plan",
+      "verb": "apply",
+      "aliases": [],
+      "summary": "Apply an open plan (the gated executor; the server enforces the contained changes' write scopes at apply time).",
+      "scopes": [
+        "plans:read"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/plan.apply.output.json",
+      "examples": [
+        "agkit plan apply plan_123",
+        "agkit apply plan_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The open plan id to apply."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required for a D/PR plan non-interactively).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "login create",
+      "noun": "login",
+      "verb": "create",
+      "aliases": [],
+      "summary": "Log in and store a management credential (browser or device flow, auto-detected).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/login.create.output.json",
+      "examples": [
+        "agkit login",
+        "agkit login --device",
+        "agkit login --scopes projects:read,routes:write"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "device": {
+            "description": "Force the RFC 8628 device flow (no local browser).",
+            "type": "boolean"
+          },
+          "no-browser": {
+            "description": "Do not open a browser; use the device flow.",
+            "type": "boolean"
+          },
+          "scopes": {
+            "description": "Comma-separated scopes to request (family:verb).",
+            "type": "string"
+          },
+          "insecure-storage": {
+            "description": "Store in a 0600 plaintext file instead of the OS keychain.",
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "logout clear",
+      "noun": "logout",
+      "verb": "clear",
+      "aliases": [],
+      "summary": "Log out: best-effort server revocation + clear the stored management credential.",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/logout.clear.output.json",
+      "examples": [
+        "agkit logout",
+        "agkit logout --all-profiles"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "all-profiles": {
+            "description": "Log out of every known profile, not just the active one.",
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "token list",
+      "noun": "token",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List management tokens for the current project (masked display forms only).",
+      "scopes": [
+        "tokens:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/token.list.output.json",
+      "examples": [
+        "agkit token list",
+        "agkit token list --limit 50"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Max rows to return.",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_token_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "tokens:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/token.list.output.json"
+      }
+    },
+    {
+      "command": "token get",
+      "noun": "token",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show one management token by id or unambiguous id/display prefix (revoked: full id only).",
+      "scopes": [
+        "tokens:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/token.get.output.json",
+      "examples": [
+        "agkit token get --id 1a2b3c4d",
+        "agkit token get --id 1a2b3c4d-0000-4000-a000-000000000001"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Token id (a UUID) or an unambiguous id/display prefix."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_token_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "tokens:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/token.get.output.json"
+      }
+    },
+    {
+      "command": "token create",
+      "noun": "token",
+      "verb": "create",
+      "aliases": [],
+      "summary": "Mint a project-scoped management token (secret shown once). Re-run mints a NEW token; use --idempotency-key to safe-retry.",
+      "scopes": [
+        "tokens:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/token.create.output.json",
+      "examples": [
+        "agkit token create --name ci-bot --scope tokens:read --expires-in 30d",
+        "agkit token create --name deploy --scope routes:read --scope routes:write --expires-in 90d"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human label for the token."
+          },
+          "scope": {
+            "description": "A required scope (repeatable): --scope <family:verb>.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "expires-in": {
+            "description": "Token lifetime: <n>m|h|d (<= 366d). Required non-interactively; 30d default on a TTY.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "token revoke",
+      "noun": "token",
+      "verb": "revoke",
+      "aliases": [],
+      "summary": "Revoke a management token by id or unambiguous id/display prefix (destructive; confirm by name).",
+      "scopes": [
+        "tokens:destroy"
+      ],
+      "danger": "D",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/token.revoke.output.json",
+      "examples": [
+        "agkit token revoke --id 1a2b3c4d-0000-4000-a000-000000000001 --confirm ci-bot"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Token id (a UUID) or an unambiguous id/display prefix."
+          },
+          "confirm": {
+            "description": "The token name, to confirm the revoke (required non-interactively).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "token-name"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "grant list",
+      "noun": "grant",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List OAuth grants on the account.",
+      "scopes": [
+        "tokens:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/grant.list.output.json",
+      "examples": [
+        "agkit grant list",
+        "agkit grant list --limit 200"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Max rows per page (server default 50, max 200).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_grant_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "tokens:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/grant.list.output.json"
+      }
+    },
+    {
+      "command": "grant show",
+      "noun": "grant",
+      "verb": "show",
+      "aliases": [],
+      "summary": "Show an OAuth grant, including child-token metadata and live-token counts.",
+      "scopes": [
+        "tokens:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/grant.show.output.json",
+      "examples": [
+        "agkit grant show 3a1f2b3c-0000-0000-0000-000000000000"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Grant id."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_grant_read",
+        "verb": "show",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "tokens:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/grant.show.output.json"
+      }
+    },
+    {
+      "command": "grant revoke",
+      "noun": "grant",
+      "verb": "revoke",
+      "aliases": [],
+      "summary": "Revoke an OAuth grant and cascade-revoke its tokens.",
+      "scopes": [
+        "tokens:destroy"
+      ],
+      "danger": "D",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/grant.revoke.output.json",
+      "examples": [
+        "agkit grant revoke 3a1f2b3c-0000-0000-0000-000000000000 --confirm \"agkit CLI\""
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Grant id to revoke."
+          },
+          "confirm": {
+            "description": "The grant's client display name, to confirm the revoke (required non-interactively).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "resource-name"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "usage series",
+      "noun": "usage",
+      "verb": "series",
+      "aliases": [],
+      "summary": "Show the usage time-series for the project.",
+      "scopes": [
+        "usage:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/usage.series.output.json",
+      "examples": [
+        "agkit usage series",
+        "agkit usage series --days 30 --dimension execution_target"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "days": {
+            "description": "Window in days (server clamps 1..365, default 30).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "dimension": {
+            "description": "Group-by dimension (server enum: execution_target | finish_reason).",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_usage_read",
+        "verb": "series",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "usage:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/usage.series.output.json"
+      }
+    },
+    {
+      "command": "usage requests",
+      "noun": "usage",
+      "verb": "requests",
+      "aliases": [],
+      "summary": "List the request log for the project (paginated).",
+      "scopes": [
+        "usage:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/usage.requests.output.json",
+      "examples": [
+        "agkit usage requests",
+        "agkit usage requests --limit 50"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Max rows per page (server max 200).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_usage_read",
+        "verb": "requests",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "usage:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/usage.requests.output.json"
+      }
+    },
+    {
+      "command": "usage top-users",
+      "noun": "usage",
+      "verb": "top-users",
+      "aliases": [],
+      "summary": "Show the top-N end-users by usage for the project.",
+      "scopes": [
+        "usage:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/usage.top-users.output.json",
+      "examples": [
+        "agkit usage top-users",
+        "agkit usage top-users --limit 10"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Top-N users to return (server default 10, cap 100).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_usage_read",
+        "verb": "top-users",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "usage:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/usage.top-users.output.json"
+      }
+    },
+    {
+      "command": "end-user list",
+      "noun": "end-user",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the project's end-users (paginated).",
+      "scopes": [
+        "usage:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/end-user.list.output.json",
+      "examples": [
+        "agkit end-user list",
+        "agkit end-user list --limit 50"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Max rows per page (server max 200).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_end_user_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "usage:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/end-user.list.output.json"
+      }
+    },
+    {
+      "command": "end-user get",
+      "noun": "end-user",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show one end-user's usage detail (embeds a models[] breakdown — project it with --jq .models).",
+      "scopes": [
+        "usage:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/end-user.get.output.json",
+      "examples": [
+        "agkit end-user get --user-hash 0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "user-hash": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The end-user's external_user_id_hash (server 404s a non-64-hex value)."
+          }
+        },
+        "required": [
+          "user-hash"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_end_user_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "usage:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/end-user.get.output.json"
+      }
+    },
+    {
+      "command": "media-usage summary",
+      "noun": "media-usage",
+      "verb": "summary",
+      "aliases": [],
+      "summary": "Show the media-usage summary for the project.",
+      "scopes": [
+        "usage:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-usage.summary.output.json",
+      "examples": [
+        "agkit media-usage summary",
+        "agkit media-usage summary --days 7"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "days": {
+            "description": "Window in days (server clamps 1..365, default 30).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_usage_read",
+        "verb": "summary",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "usage:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-usage.summary.output.json"
+      }
+    },
+    {
+      "command": "media-usage costs",
+      "noun": "media-usage",
+      "verb": "costs",
+      "aliases": [],
+      "summary": "Show media-usage costs for the project.",
+      "scopes": [
+        "usage:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-usage.costs.output.json",
+      "examples": [
+        "agkit media-usage costs",
+        "agkit media-usage costs --days 7"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "days": {
+            "description": "Window in days (server clamps 1..365, default 30).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_usage_read",
+        "verb": "costs",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "usage:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-usage.costs.output.json"
+      }
+    },
+    {
+      "command": "media-usage requests",
+      "noun": "media-usage",
+      "verb": "requests",
+      "aliases": [],
+      "summary": "List the media request log for the project (paginated).",
+      "scopes": [
+        "usage:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-usage.requests.output.json",
+      "examples": [
+        "agkit media-usage requests",
+        "agkit media-usage requests --limit 50"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Max rows per page (server max 200).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_usage_read",
+        "verb": "requests",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "usage:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-usage.requests.output.json"
+      }
+    },
+    {
+      "command": "media-job list",
+      "noun": "media-job",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the project's media jobs (paginated).",
+      "scopes": [
+        "jobs:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-job.list.output.json",
+      "examples": [
+        "agkit media-job list",
+        "agkit media-job list --status completed --limit 50"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "Filter by job status (server enum: pending | processing | completed | failed).",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Max rows per page (server max 200).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_job_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "jobs:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-job.list.output.json"
+      }
+    },
+    {
+      "command": "media-job get",
+      "noun": "media-job",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show one media job.",
+      "scopes": [
+        "jobs:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-job.get.output.json",
+      "examples": [
+        "agkit media-job get --id mj_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Media job id."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_job_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "jobs:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-job.get.output.json"
+      }
+    },
+    {
+      "command": "audit list",
+      "noun": "audit",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the account audit log (de-clamped keyset pagination; --project filters to one project).",
+      "scopes": [
+        "audit:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/audit.list.output.json",
+      "examples": [
+        "agkit audit",
+        "agkit audit --since 2026-07-01 --action project.create"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "since": {
+            "description": "Only events at/after this ISO-8601 date or datetime (server validates).",
+            "type": "string"
+          },
+          "until": {
+            "description": "Only events at/before this ISO-8601 date or datetime (server validates).",
+            "type": "string"
+          },
+          "action": {
+            "description": "Filter by action string.",
+            "type": "string"
+          },
+          "actor": {
+            "description": "Filter by actor.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Max rows per page (server max 200).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_audit_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "audit:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/audit.list.output.json"
+      }
+    },
+    {
+      "command": "attested-key list",
+      "noun": "attested-key",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the project's attested keys (paginated).",
+      "scopes": [
+        "attest:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/attested-key.list.output.json",
+      "examples": [
+        "agkit attested-key list",
+        "agkit attested-key list --user-hash 0000000000000000000000000000000000000000000000000000000000000000"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "user-hash": {
+            "description": "Filter by end-user external_user_id_hash.",
+            "type": "string",
+            "minLength": 1
+          },
+          "limit": {
+            "description": "Max rows per page (server max 200).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_attested_key_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "attest:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/attested-key.list.output.json"
+      }
+    },
+    {
+      "command": "attested-key revoke",
+      "noun": "attested-key",
+      "verb": "revoke",
+      "aliases": [],
+      "summary": "Revoke an attested device key by row id (destructive; confirm by the Apple App Attest key_id).",
+      "scopes": [
+        "attest:destroy"
+      ],
+      "danger": "D",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/attested-key.revoke.output.json",
+      "examples": [
+        "agkit attested-key revoke --id 1a2b3c4d-0000-4000-a000-000000000001 --confirm <key-id>"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The attested-key ROW id (a UUID). Used verbatim — there is no prefix resolution."
+          },
+          "confirm": {
+            "description": "The key's Apple App Attest key_id, to confirm the revoke (required non-interactively).",
+            "type": "string"
+          },
+          "if-match": {
+            "description": "Revoke against this exact ETag (skips the etag lookup; from `attested-key list`).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "key-id"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "account get",
+      "noun": "account",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show the account profile.",
+      "scopes": [
+        "account:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/account.get.output.json",
+      "examples": [
+        "agkit account get"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_billing_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "account:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/account.get.output.json"
+      }
+    },
+    {
+      "command": "account usage",
+      "noun": "account",
+      "verb": "usage",
+      "aliases": [],
+      "summary": "Show account-level usage.",
+      "scopes": [
+        "usage:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/account.usage.output.json",
+      "examples": [
+        "agkit account usage"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_usage_read",
+        "verb": "usage",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "usage:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/account.usage.output.json"
+      }
+    },
+    {
+      "command": "account security",
+      "noun": "account",
+      "verb": "security",
+      "aliases": [],
+      "summary": "Print the dashboard account-security page link (TOTP, password) and report what this credential can actually do.",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/account.security.output.json",
+      "examples": [
+        "agkit account security"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "billing info",
+      "noun": "billing",
+      "verb": "info",
+      "aliases": [],
+      "summary": "Show the current billing state.",
+      "scopes": [
+        "billing:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/billing.info.output.json",
+      "examples": [
+        "agkit billing info"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_billing_read",
+        "verb": "info",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "billing:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/billing.info.output.json"
+      }
+    },
+    {
+      "command": "billing plans",
+      "noun": "billing",
+      "verb": "plans",
+      "aliases": [],
+      "summary": "List the available billing plans (server truth; no local catalog).",
+      "scopes": [
+        "billing:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/billing.plans.output.json",
+      "examples": [
+        "agkit billing plans"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_billing_read",
+        "verb": "plans",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "billing:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/billing.plans.output.json"
+      }
+    },
+    {
+      "command": "billing checkout",
+      "noun": "billing",
+      "verb": "checkout",
+      "aliases": [],
+      "summary": "Start a Stripe checkout session for a plan (returns a URL to open in a browser).",
+      "scopes": [
+        "billing:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/billing.checkout.output.json",
+      "examples": [
+        "agkit billing checkout --plan pro"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "plan": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Plan id (server-validated; see `agkit billing plans`)."
+          },
+          "email": {
+            "description": "Checkout email; when omitted, the server uses your account email on file.",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "plan"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "billing portal",
+      "noun": "billing",
+      "verb": "portal",
+      "aliases": [],
+      "summary": "Open the Stripe billing portal (returns a URL to open in a browser).",
+      "scopes": [
+        "billing:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/billing.portal.output.json",
+      "examples": [
+        "agkit billing portal"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "member list",
+      "noun": "member",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the account's team members.",
+      "scopes": [
+        "account:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/member.list.output.json",
+      "examples": [
+        "agkit member"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_member_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "account:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/member.list.output.json"
+      }
+    },
+    {
+      "command": "publishable-key list",
+      "noun": "publishable-key",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the project's publishable keys (masked; paginated).",
+      "scopes": [
+        "keys:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/publishable-key.list.output.json",
+      "examples": [
+        "agkit publishable-key list",
+        "agkit publishable-key list --limit 50"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Max rows to return.",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_key_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "keys:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/publishable-key.list.output.json"
+      }
+    },
+    {
+      "command": "publishable-key create",
+      "noun": "publishable-key",
+      "verb": "create",
+      "aliases": [],
+      "summary": "Mint a publishable key (the full ak_pk_live_ value is shown once). --idempotency-key <k> for safe retry.",
+      "scopes": [
+        "keys:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/publishable-key.create.output.json",
+      "examples": [
+        "agkit publishable-key create --name prod-web"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "Human label for the publishable key."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "publishable-key revoke",
+      "noun": "publishable-key",
+      "verb": "revoke",
+      "aliases": [],
+      "summary": "Revoke a publishable key (bricks apps using it — destructive; confirm by name).",
+      "scopes": [
+        "keys:destroy"
+      ],
+      "danger": "D",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/publishable-key.revoke.output.json",
+      "examples": [
+        "agkit publishable-key revoke pk_123 --confirm prod-web"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Publishable key id to revoke."
+          },
+          "confirm": {
+            "description": "The publishable key's name, to confirm the revoke (required non-interactively).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "resource-name"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "attestation get",
+      "noun": "attestation",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show the project's App Attest configuration.",
+      "scopes": [
+        "projects:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/attestation.get.output.json",
+      "examples": [
+        "agkit attestation get"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_attestation_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "projects:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/attestation.get.output.json"
+      }
+    },
+    {
+      "command": "attestation set",
+      "noun": "attestation",
+      "verb": "set",
+      "aliases": [],
+      "summary": "Set or clear the project's App Attest configuration.",
+      "scopes": [
+        "projects:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/attestation.set.output.json",
+      "examples": [
+        "agkit attestation set --app-attest-app-id TEAM1.com.acme.app --environment production",
+        "agkit attestation set --clear"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "app-attest-app-id": {
+            "description": "The App Attest App ID to bind (TEAMID.bundle.id).",
+            "type": "string",
+            "minLength": 1
+          },
+          "environment": {
+            "description": "App Attest environment: development or production.",
+            "type": "string",
+            "enum": [
+              "development",
+              "production"
+            ]
+          },
+          "clear": {
+            "description": "Clear the stored App Attest App ID (fail-closed).",
+            "type": "boolean"
+          },
+          "confirm": {
+            "description": "The plan's confirm string (only needed if the server plan is destructive/prod-rebinding).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_attestation_plan",
+        "verb": "set",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "projects:write"
+        ],
+        "danger": "M",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/attestation.set.output.json"
+      }
+    },
+    {
+      "command": "provider-key list",
+      "noun": "provider-key",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List provider credentials for the current project (masked prefix metadata only; never key material).",
+      "scopes": [
+        "provider-keys:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/provider-key.list.output.json",
+      "examples": [
+        "agkit provider-key list"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_provider_key_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "provider-keys:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/provider-key.list.output.json"
+      }
+    },
+    {
+      "command": "provider-key add",
+      "noun": "provider-key",
+      "verb": "add",
+      "aliases": [],
+      "summary": "Store a provider credential (secret via --api-key-env <VAR>, --api-key-file <PATH>, or a hidden prompt; never argv). Re-run to add another provider.",
+      "scopes": [
+        "provider-keys:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/provider-key.add.output.json",
+      "examples": [
+        "agkit provider-key add --provider example-llm --api-key-env EXAMPLE_LLM_KEY",
+        "agkit provider-key add --provider example-llm --api-key-env EXAMPLE_LLM_KEY --endpoint-url https://api.example.com/v1 --auth-style example-style --header-name api-key --extra-header x-title=my-app"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The provider slug to store a credential for (server-owned vocabulary)."
+          },
+          "api-key-env": {
+            "description": "Name of the env var holding the API key (the CLI reads process.env[VAR]; the key never rides argv).",
+            "type": "string",
+            "minLength": 1
+          },
+          "api-key-file": {
+            "description": "Path to a file whose CONTENT is the API key (regular file, chmod 600, POSIX only; one trailing newline is stripped). Mutually exclusive with --api-key-env.",
+            "type": "string",
+            "minLength": 1
+          },
+          "endpoint-url": {
+            "description": "Custom BYO endpoint: the full endpoint URL (the server owns https-only and egress policy).",
+            "type": "string",
+            "minLength": 1
+          },
+          "auth-style": {
+            "description": "Custom BYO endpoint: the auth style (server-owned closed vocabulary).",
+            "type": "string",
+            "minLength": 1
+          },
+          "header-name": {
+            "description": "Custom BYO endpoint: the auth header name (e.g. api-key).",
+            "type": "string",
+            "minLength": 1
+          },
+          "extra-header": {
+            "description": "A non-secret metadata header, name=value (repeatable). The server enforces a CLOSED allowlist of non-secret header names and teaches on violation; a secret NEVER belongs here (the key rides the auth header only).",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "provider"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_provider_key_plan",
+        "verb": "add",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "provider-keys:write"
+        ],
+        "danger": "M",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/provider-key.add.output.json"
+      }
+    },
+    {
+      "command": "provider-key rotate",
+      "noun": "provider-key",
+      "verb": "rotate",
+      "aliases": [],
+      "summary": "Rotate a provider credential to a new key (prod-rebinding; secret via --api-key-env <VAR>, --api-key-file <PATH>, or a hidden prompt).",
+      "scopes": [
+        "provider-keys:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/provider-key.rotate.output.json",
+      "examples": [
+        "agkit provider-key rotate --provider example-llm --api-key-env EXAMPLE_LLM_KEY"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The provider slug whose credential to rotate."
+          },
+          "api-key-env": {
+            "description": "Name of the env var holding the NEW API key (the CLI reads process.env[VAR]; the key never rides argv).",
+            "type": "string",
+            "minLength": 1
+          },
+          "api-key-file": {
+            "description": "Path to a file whose CONTENT is the NEW API key (regular file, chmod 600, POSIX only; one trailing newline is stripped). Mutually exclusive with --api-key-env.",
+            "type": "string",
+            "minLength": 1
+          },
+          "endpoint-url": {
+            "description": "Custom BYO endpoint: the full endpoint URL (the server owns https-only and egress policy).",
+            "type": "string",
+            "minLength": 1
+          },
+          "auth-style": {
+            "description": "Custom BYO endpoint: the auth style (server-owned closed vocabulary).",
+            "type": "string",
+            "minLength": 1
+          },
+          "header-name": {
+            "description": "Custom BYO endpoint: the auth header name (e.g. api-key).",
+            "type": "string",
+            "minLength": 1
+          },
+          "extra-header": {
+            "description": "A non-secret metadata header, name=value (repeatable). The server enforces a CLOSED allowlist of non-secret header names and teaches on violation; a secret NEVER belongs here (the key rides the auth header only).",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "provider"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_provider_key_plan",
+        "verb": "rotate",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "provider-keys:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/provider-key.rotate.output.json"
+      }
+    },
+    {
+      "command": "provider-key revoke",
+      "noun": "provider-key",
+      "verb": "revoke",
+      "aliases": [],
+      "summary": "Revoke a provider credential (SOFT delete — stops dispatching immediately; confirm by provider slug).",
+      "scopes": [
+        "provider-keys:destroy"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/provider-key.revoke.output.json",
+      "examples": [
+        "agkit provider-key revoke --provider example-llm --confirm example-llm"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The provider slug whose credential to revoke (also the confirm value)."
+          },
+          "confirm": {
+            "description": "The provider slug, to confirm the revoke (required non-interactively).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "resource-name"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "route list",
+      "noun": "route",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List model routes for the current project (tier → model/provider/execution-target bindings).",
+      "scopes": [
+        "routes:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.list.output.json",
+      "examples": [
+        "agkit route list"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_route_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "routes:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.list.output.json"
+      }
+    },
+    {
+      "command": "route get",
+      "noun": "route",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show one model route by id.",
+      "scopes": [
+        "routes:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.get.output.json",
+      "examples": [
+        "agkit route get mr_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Model-route id."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_route_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "routes:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.get.output.json"
+      }
+    },
+    {
+      "command": "route defaults",
+      "noun": "route",
+      "verb": "defaults",
+      "aliases": [],
+      "summary": "Show the recommended default model routes for the current project (the server's starting catalog).",
+      "scopes": [
+        "routes:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.defaults.output.json",
+      "examples": [
+        "agkit route defaults"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_route_read",
+        "verb": "defaults",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "routes:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.defaults.output.json"
+      }
+    },
+    {
+      "command": "route create",
+      "noun": "route",
+      "verb": "create",
+      "aliases": [],
+      "summary": "Create a model route (prod-rebinding): bind a tier to a model/provider/execution-target.",
+      "scopes": [
+        "routes:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.create.output.json",
+      "examples": [
+        "agkit route create --tier example-tier --model example-model --provider example-llm --execution-target example-target --attestation off"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "tier": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The client-visible tier this route binds (server-owned vocabulary)."
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The model this tier binds to (server-owned vocabulary)."
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The provider serving the model (server-owned vocabulary)."
+          },
+          "execution-target": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Where inference executes (server-owned bindable registry, fail-closed)."
+          },
+          "fallback-execution-target": {
+            "description": "Fallback execution target; ABSENT sends an explicit null (no fallback).",
+            "type": "string",
+            "minLength": 1
+          },
+          "attestation": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Attestation policy for this route (server-owned vocabulary)."
+          },
+          "enabled": {
+            "description": "Whether the route is live (default true).",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "default": {
+            "description": "Whether this route is the tier's default (default false).",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "tier",
+          "model",
+          "provider",
+          "execution-target",
+          "attestation"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_route_plan",
+        "verb": "create",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "routes:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.create.output.json"
+      }
+    },
+    {
+      "command": "route update",
+      "noun": "route",
+      "verb": "update",
+      "aliases": [],
+      "summary": "Update a model route (prod-rebinding): patch its binding members (tier is immutable).",
+      "scopes": [
+        "routes:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.update.output.json",
+      "examples": [
+        "agkit route update mr_123 --model example-model"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Model-route id to update."
+          },
+          "provider": {
+            "description": "New provider (server-owned vocabulary).",
+            "type": "string",
+            "minLength": 1
+          },
+          "model": {
+            "description": "New model (server-owned vocabulary).",
+            "type": "string",
+            "minLength": 1
+          },
+          "execution-target": {
+            "description": "New execution target (server-owned registry).",
+            "type": "string",
+            "minLength": 1
+          },
+          "fallback-execution-target": {
+            "description": "New fallback execution target (use --clear-fallback-execution-target to unset).",
+            "type": "string",
+            "minLength": 1
+          },
+          "clear-fallback-execution-target": {
+            "description": "Clear the fallback execution target (sends an explicit null).",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "attestation": {
+            "description": "New attestation policy (server-owned vocabulary).",
+            "type": "string",
+            "minLength": 1
+          },
+          "enabled": {
+            "description": "Enable/disable the route: --enabled true|false.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "default": {
+            "description": "Make (or unmake) this route the tier's default: --default true|false.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_route_plan",
+        "verb": "update",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "routes:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.update.output.json"
+      }
+    },
+    {
+      "command": "route delete",
+      "noun": "route",
+      "verb": "delete",
+      "aliases": [],
+      "summary": "Delete a model route (prod-rebinding, destructive).",
+      "scopes": [
+        "routes:destroy"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.delete.output.json",
+      "examples": [
+        "agkit route delete mr_123"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Model-route id to delete."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_route_plan",
+        "verb": "delete",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "routes:destroy"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/route.delete.output.json"
+      }
+    },
+    {
+      "command": "secret-source list",
+      "noun": "secret-source",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the declared indirect secret sources for the active profile (names and paths only; never values).",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/secret-source.list.output.json",
+      "examples": [
+        "agkit secret-source list"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "secret-source add",
+      "noun": "secret-source",
+      "verb": "add",
+      "aliases": [],
+      "summary": "Declare an env var or a file as a secret source the MCP surface may reference (a declaration holds no secret material).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/secret-source.add.output.json",
+      "examples": [
+        "agkit secret-source add --env EXAMPLE_LLM_KEY",
+        "agkit secret-source add --file /etc/agentkit/example-llm.key"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "env": {
+            "description": "Name of an environment variable to declare as a secret source (the NAME, never the value).",
+            "type": "string",
+            "minLength": 1
+          },
+          "file": {
+            "description": "Absolute path of a file whose CONTENT is a secret (regular file, chmod 600, POSIX only).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "secret-source remove",
+      "noun": "secret-source",
+      "verb": "remove",
+      "aliases": [],
+      "summary": "Withdraw a declared secret source (indirect references to it stop being honored).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/secret-source.remove.output.json",
+      "examples": [
+        "agkit secret-source remove --env EXAMPLE_LLM_KEY",
+        "agkit secret-source remove --file /etc/agentkit/example-llm.key"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "env": {
+            "description": "Name of an environment variable to declare as a secret source (the NAME, never the value).",
+            "type": "string",
+            "minLength": 1
+          },
+          "file": {
+            "description": "Absolute path of a file whose CONTENT is a secret (regular file, chmod 600, POSIX only).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "agent list",
+      "noun": "agent",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the project's agent profiles.",
+      "scopes": [
+        "agents:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.list.output.json",
+      "examples": [
+        "agkit agent list"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.list.output.json"
+      }
+    },
+    {
+      "command": "agent get",
+      "noun": "agent",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show an agent profile.",
+      "scopes": [
+        "agents:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.get.output.json",
+      "examples": [
+        "agkit agent get support-bot"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "agent": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Agent profile slug or id."
+          }
+        },
+        "required": [
+          "agent"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.get.output.json"
+      }
+    },
+    {
+      "command": "agent create",
+      "noun": "agent",
+      "verb": "create",
+      "aliases": [],
+      "summary": "Create an agent profile (prod-rebinding).",
+      "scopes": [
+        "agents:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.create.output.json",
+      "examples": [
+        "agkit agent create support-bot --display-name \"Support Bot\" --static-system-prompt \"You help customers.\" --allowed-tiers example-tier-a --allowed-tiers example-tier-b --max-input-tokens 8000 --max-output-tokens 2000"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The agent profile's stable slug (server-owned uniqueness per project)."
+          },
+          "display-name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human-readable name for the profile."
+          },
+          "static-system-prompt": {
+            "type": "string",
+            "description": "The profile's static system prompt (may be empty)."
+          },
+          "allowed-tiers": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ],
+            "description": "A tier this profile may use (repeatable; server-owned vocabulary)."
+          },
+          "max-input-tokens": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991,
+            "description": "Max input tokens per request."
+          },
+          "max-output-tokens": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991,
+            "description": "Max output tokens per request."
+          },
+          "enabled": {
+            "description": "Whether the profile is live (default true).",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "safety-settings": {
+            "description": "Safety settings as a JSON object; ABSENT sends an explicit null (deliberately unset).",
+            "type": "string"
+          },
+          "thinking-config": {
+            "description": "Thinking config as a JSON object; ABSENT sends an explicit null (deliberately unset).",
+            "type": "string"
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "slug",
+          "display-name",
+          "static-system-prompt",
+          "allowed-tiers",
+          "max-input-tokens",
+          "max-output-tokens"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_plan",
+        "verb": "create",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.create.output.json"
+      }
+    },
+    {
+      "command": "agent update",
+      "noun": "agent",
+      "verb": "update",
+      "aliases": [],
+      "summary": "Update an agent profile's config (slug is immutable; prod-rebinding).",
+      "scopes": [
+        "agents:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.update.output.json",
+      "examples": [
+        "agkit agent update support-bot --display-name \"Support Assistant\""
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "agent": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Agent profile slug or id to update."
+          },
+          "display-name": {
+            "description": "Human-readable name for the profile.",
+            "type": "string",
+            "minLength": 1
+          },
+          "static-system-prompt": {
+            "description": "The profile's static system prompt (may be empty).",
+            "type": "string"
+          },
+          "allowed-tiers": {
+            "description": "Replace the allowed tiers (repeatable; server-owned vocabulary).",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "max-input-tokens": {
+            "description": "Max input tokens per request.",
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "max-output-tokens": {
+            "description": "Max output tokens per request.",
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "enabled": {
+            "description": "Whether the profile is live.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "safety-settings": {
+            "description": "Safety settings as a JSON object.",
+            "type": "string"
+          },
+          "clear-safety-settings": {
+            "description": "Set safety settings to null (deliberately unset).",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "thinking-config": {
+            "description": "Thinking config as a JSON object.",
+            "type": "string"
+          },
+          "clear-thinking-config": {
+            "description": "Set thinking config to null (deliberately unset).",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "agent"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_plan",
+        "verb": "update",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.update.output.json"
+      }
+    },
+    {
+      "command": "agent delete",
+      "noun": "agent",
+      "verb": "delete",
+      "aliases": [],
+      "summary": "Delete an agent profile (cascades to its tools + knowledge bindings — destructive, prod-rebinding).",
+      "scopes": [
+        "agents:destroy"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.delete.output.json",
+      "examples": [
+        "agkit agent delete support-bot"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "agent": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Agent profile slug or id to delete."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "agent"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_plan",
+        "verb": "delete",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:destroy"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.delete.output.json"
+      }
+    },
+    {
+      "command": "agent sync",
+      "noun": "agent",
+      "verb": "sync",
+      "aliases": [],
+      "summary": "Sync agent profiles from a JSON file (upsert-only; prod-rebinding).",
+      "scopes": [
+        "agents:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent.sync.output.json",
+      "examples": [
+        "agkit agent sync --file agents.json"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the JSON sync file ({\"profiles\":[…]})."
+          },
+          "confirm": {
+            "description": "The confirm value (\"sync N profiles\"), required non-interactively.",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "agent-tool list",
+      "noun": "agent-tool",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List an agent profile's tools.",
+      "scopes": [
+        "agents:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.list.output.json",
+      "examples": [
+        "agkit agent-tool list --agent support-bot"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "agent": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The parent agent profile (slug or id)."
+          }
+        },
+        "required": [
+          "agent"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_read",
+        "verb": "tool_list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.list.output.json"
+      }
+    },
+    {
+      "command": "agent-tool get",
+      "noun": "agent-tool",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show one of an agent profile's tools.",
+      "scopes": [
+        "agents:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.get.output.json",
+      "examples": [
+        "agkit agent-tool get lookup_order --agent support-bot"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The tool name or id."
+          },
+          "agent": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The parent agent profile (slug or id)."
+          }
+        },
+        "required": [
+          "tool",
+          "agent"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_read",
+        "verb": "tool_get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.get.output.json"
+      }
+    },
+    {
+      "command": "agent-tool create",
+      "noun": "agent-tool",
+      "verb": "create",
+      "aliases": [],
+      "summary": "Add a tool to an agent profile (prod-rebinding).",
+      "scopes": [
+        "agents:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.create.output.json",
+      "examples": [
+        "agkit agent-tool create lookup_order --agent support-bot --description \"Look up an order\" --parameter-schema '{\"type\":\"object\",\"properties\":{}}'"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The tool's name (unique per profile; immutable once created)."
+          },
+          "agent": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The parent agent profile (slug or id)."
+          },
+          "description": {
+            "type": "string",
+            "description": "What the tool does (may be empty)."
+          },
+          "parameter-schema": {
+            "type": "string",
+            "description": "The tool's JSON-Schema parameter object (a JSON object)."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "name",
+          "agent",
+          "description",
+          "parameter-schema"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_plan",
+        "verb": "tool_create",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.create.output.json"
+      }
+    },
+    {
+      "command": "agent-tool update",
+      "noun": "agent-tool",
+      "verb": "update",
+      "aliases": [],
+      "summary": "Update a tool's config (tool name is immutable; prod-rebinding).",
+      "scopes": [
+        "agents:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.update.output.json",
+      "examples": [
+        "agkit agent-tool update lookup_order --agent support-bot --description \"Look up an order by id\""
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The tool name or id to update."
+          },
+          "agent": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The parent agent profile (slug or id)."
+          },
+          "description": {
+            "description": "What the tool does.",
+            "type": "string",
+            "minLength": 1
+          },
+          "parameter-schema": {
+            "description": "The tool's JSON-Schema parameter object (a JSON object).",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "Whether the tool is active.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "tool",
+          "agent"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_plan",
+        "verb": "tool_update",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.update.output.json"
+      }
+    },
+    {
+      "command": "agent-tool delete",
+      "noun": "agent-tool",
+      "verb": "delete",
+      "aliases": [],
+      "summary": "Delete a tool from an agent profile (prod-rebinding).",
+      "scopes": [
+        "agents:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.delete.output.json",
+      "examples": [
+        "agkit agent-tool delete lookup_order --agent support-bot"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The tool name or id to delete."
+          },
+          "agent": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The parent agent profile (slug or id)."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "tool",
+          "agent"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_agent_plan",
+        "verb": "tool_delete",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "agents:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/agent-tool.delete.output.json"
+      }
+    },
+    {
+      "command": "quota get",
+      "noun": "quota",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show the project's usage quotas (caps + current usage).",
+      "scopes": [
+        "quotas:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/quota.get.output.json",
+      "examples": [
+        "agkit quota get"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_quota_read",
+        "verb": "get",
+        "discriminator": {
+          "param": "kind",
+          "value": "agent"
+        },
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "quotas:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/quota.get.output.json"
+      }
+    },
+    {
+      "command": "quota set",
+      "noun": "quota",
+      "verb": "set",
+      "aliases": [],
+      "summary": "Set usage-quota caps (named members only; the others keep their current values).",
+      "scopes": [
+        "quotas:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/quota.set.output.json",
+      "examples": [
+        "agkit quota set --max-requests-per-second-per-user 10 --monthly-spend-cap-usd 100.00"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "max-requests-per-second-per-user": {
+            "description": "Per-user request-rate cap (1..1000; the one member with no uncapped null).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000
+          },
+          "max-turns-per-day-per-user": {
+            "description": "Per-user daily turn cap (0..1000000).",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000
+          },
+          "monthly-token-cap": {
+            "description": "Project monthly token cap (integer string).",
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$"
+          },
+          "monthly-spend-cap-usd": {
+            "description": "Project monthly spend cap (2-dp USD string, e.g. \"100.00\").",
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+          },
+          "max-monthly-spend-per-user-usd": {
+            "description": "Per-user monthly spend cap (2-dp USD string).",
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+          },
+          "monthly-spend-alert-threshold-usd": {
+            "description": "Alert threshold (2-dp USD string; server enforces threshold <= cap).",
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_quota_plan",
+        "verb": "set",
+        "discriminator": {
+          "param": "kind",
+          "value": "agent"
+        },
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "quotas:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/quota.set.output.json"
+      }
+    },
+    {
+      "command": "quota clear",
+      "noun": "quota",
+      "verb": "clear",
+      "aliases": [],
+      "summary": "Clear named quota caps to uncapped (null); other members keep their current values.",
+      "scopes": [
+        "quotas:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/quota.clear.output.json",
+      "examples": [
+        "agkit quota clear --fields monthly_token_cap"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "fields": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated quota members to clear to uncapped (the nullable five; see --help)."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "fields"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_quota_plan",
+        "verb": "clear",
+        "discriminator": {
+          "param": "kind",
+          "value": "agent"
+        },
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "quotas:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/quota.clear.output.json"
+      }
+    },
+    {
+      "command": "revenuecat get",
+      "noun": "revenuecat",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show the project's RevenueCat binding config (the secret API key is never returned).",
+      "scopes": [
+        "revenuecat:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/revenuecat.get.output.json",
+      "examples": [
+        "agkit revenuecat get"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_revenuecat_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "revenuecat:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/revenuecat.get.output.json"
+      }
+    },
+    {
+      "command": "revenuecat set",
+      "noun": "revenuecat",
+      "verb": "set",
+      "aliases": [],
+      "summary": "Set or replace the RevenueCat secret API key (validated live; entitlement/claim/TTL config is dashboard-managed at this contract version; prod-rebinding).",
+      "scopes": [
+        "revenuecat:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/revenuecat.set.output.json",
+      "examples": [
+        "agkit revenuecat set --api-key-env MY_REVENUECAT_KEY"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "api-key-env": {
+            "description": "NAME of an environment variable holding the RevenueCat secret API key (never the key itself).",
+            "type": "string",
+            "minLength": 1
+          },
+          "confirm": {
+            "description": "The project NAME, to confirm (required non-interactively; the server verifies it).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "project-name"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "revenuecat delete",
+      "noun": "revenuecat",
+      "verb": "delete",
+      "aliases": [],
+      "summary": "Delete the RevenueCat binding — hard-deletes the row (the dashboard's 'disable' label is a mislabel); end-user entitlement gating stops (destructive, prod-rebinding).",
+      "scopes": [
+        "revenuecat:destroy"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/revenuecat.delete.output.json",
+      "examples": [
+        "agkit revenuecat delete"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_revenuecat_plan",
+        "verb": "delete",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "revenuecat:destroy"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/revenuecat.delete.output.json"
+      }
+    },
+    {
+      "command": "kill-switch status",
+      "noun": "kill-switch",
+      "verb": "status",
+      "aliases": [],
+      "summary": "Show the project's kill-switch state (active, reason, attribution).",
+      "scopes": [
+        "killswitch:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/kill-switch.status.output.json",
+      "examples": [
+        "agkit kill-switch status"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_killswitch_read",
+        "verb": "status",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "killswitch:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/kill-switch.status.output.json"
+      }
+    },
+    {
+      "command": "kill-switch activate",
+      "noun": "kill-switch",
+      "verb": "activate",
+      "aliases": [],
+      "summary": "ENGAGE the kill switch — halts ALL end-user traffic for this project immediately (requires --reason).",
+      "scopes": [
+        "killswitch:write"
+      ],
+      "danger": "D",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/kill-switch.activate.output.json",
+      "examples": [
+        "agkit kill-switch activate --reason \"provider incident\""
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Why traffic is being halted (required; recorded with attribution; 1..512 chars)."
+          },
+          "confirm": {
+            "description": "The project NAME, to confirm (required non-interactively; the server verifies it).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "project-name",
+        "requireReason": true
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "kill-switch deactivate",
+      "noun": "kill-switch",
+      "verb": "deactivate",
+      "aliases": [],
+      "summary": "Disengage the kill switch — resumes end-user traffic (prod-rebinding; prior attribution is preserved).",
+      "scopes": [
+        "killswitch:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/kill-switch.deactivate.output.json",
+      "examples": [
+        "agkit kill-switch deactivate"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_killswitch_plan",
+        "verb": "deactivate",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "killswitch:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/kill-switch.deactivate.output.json"
+      }
+    },
+    {
+      "command": "media-route list",
+      "noun": "media-route",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the project's media routes (capability → provider+model bindings).",
+      "scopes": [
+        "media-routes:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.list.output.json",
+      "examples": [
+        "agkit media-route list"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_route_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "media-routes:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.list.output.json"
+      }
+    },
+    {
+      "command": "media-route get",
+      "noun": "media-route",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show one capability's media route.",
+      "scopes": [
+        "media-routes:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.get.output.json",
+      "examples": [
+        "agkit media-route get image"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "capability": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Media capability key (e.g. image, voice)."
+          }
+        },
+        "required": [
+          "capability"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_route_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "media-routes:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.get.output.json"
+      }
+    },
+    {
+      "command": "media-route set",
+      "noun": "media-route",
+      "verb": "set",
+      "aliases": [],
+      "summary": "Bind a capability's media route to a provider + model (prod-rebinding).",
+      "scopes": [
+        "media-routes:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.set.output.json",
+      "examples": [
+        "agkit media-route set image --provider example-media --model example-model"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "capability": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Media capability key (e.g. image, voice)."
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Provider slug for this capability (user-supplied; the dashboard owns realization)."
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Model id at the provider (required by the wire contract)."
+          },
+          "config-json": {
+            "description": "Path to a JSON file whose object REPLACES the stored config wholesale; omit to leave the stored config untouched.",
+            "type": "string",
+            "minLength": 1
+          },
+          "disabled": {
+            "description": "Bind the route disabled (`--disabled` / `--disabled true`); default: enabled on create, current state preserved on rebind.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "capability",
+          "provider",
+          "model"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_route_plan",
+        "verb": "set",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "media-routes:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.set.output.json"
+      }
+    },
+    {
+      "command": "media-route enable",
+      "noun": "media-route",
+      "verb": "enable",
+      "aliases": [],
+      "summary": "Enable a capability's media route (prod-rebinding).",
+      "scopes": [
+        "media-routes:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.enable.output.json",
+      "examples": [
+        "agkit media-route enable image"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "capability": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Media capability key (e.g. image, voice)."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "capability"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_route_plan",
+        "verb": "enable",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "media-routes:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.enable.output.json"
+      }
+    },
+    {
+      "command": "media-route disable",
+      "noun": "media-route",
+      "verb": "disable",
+      "aliases": [],
+      "summary": "Disable a capability's media route (the binding is kept; enable restores it).",
+      "scopes": [
+        "media-routes:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.disable.output.json",
+      "examples": [
+        "agkit media-route disable image"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "capability": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Media capability key (e.g. image, voice)."
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "capability"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_media_route_plan",
+        "verb": "disable",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "media-routes:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-route.disable.output.json"
+      }
+    },
+    {
+      "command": "voice-identity list",
+      "noun": "voice-identity",
+      "verb": "list",
+      "aliases": [],
+      "summary": "List the project's voice identities.",
+      "scopes": [
+        "identities:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.list.output.json",
+      "examples": [
+        "agkit voice-identity list"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Max rows to return.",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 200
+          },
+          "cursor": {
+            "description": "Opaque pagination cursor.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_voice_identity_read",
+        "verb": "list",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "identities:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.list.output.json"
+      }
+    },
+    {
+      "command": "voice-identity get",
+      "noun": "voice-identity",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show one voice identity (the resource id never appears in any read).",
+      "scopes": [
+        "identities:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.get.output.json",
+      "examples": [
+        "agkit voice-identity get narrator"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Identity key (the row's natural key, with its provider)."
+          },
+          "provider": {
+            "description": "Provider owning the key (skips the list scan).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_voice_identity_read",
+        "verb": "get",
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "identities:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.get.output.json"
+      }
+    },
+    {
+      "command": "voice-identity set",
+      "noun": "voice-identity",
+      "verb": "set",
+      "aliases": [],
+      "summary": "Bind a voice identity to a provider resource (secret resource id; prod-rebinding).",
+      "scopes": [
+        "identities:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.set.output.json",
+      "examples": [
+        "agkit voice-identity set narrator --provider example-voice --resource-id-env MY_VOICE_RESOURCE_ID"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Identity key (the row's natural key; also the typed confirm value)."
+          },
+          "provider": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Provider owning this identity (user-supplied; validation is server-owned)."
+          },
+          "resource-id-env": {
+            "description": "NAME of an environment variable holding the provider resource id (never the id itself).",
+            "type": "string",
+            "minLength": 1
+          },
+          "confirm": {
+            "description": "The identity KEY, to confirm (required non-interactively; checked locally and by the server).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key",
+          "provider"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "key-id"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "voice-identity enable",
+      "noun": "voice-identity",
+      "verb": "enable",
+      "aliases": [],
+      "summary": "Enable a voice identity (re-validates live at the provider; prod-rebinding).",
+      "scopes": [
+        "identities:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.enable.output.json",
+      "examples": [
+        "agkit voice-identity enable narrator"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Identity key (the row's natural key; also the typed confirm value)."
+          },
+          "provider": {
+            "description": "Provider owning the key (skips the list scan).",
+            "type": "string",
+            "minLength": 1
+          },
+          "confirm": {
+            "description": "The identity KEY, to confirm (required non-interactively; checked locally and by the server).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "key-id"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "voice-identity disable",
+      "noun": "voice-identity",
+      "verb": "disable",
+      "aliases": [],
+      "summary": "Disable a voice identity (the binding is kept; enable restores it).",
+      "scopes": [
+        "identities:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.disable.output.json",
+      "examples": [
+        "agkit voice-identity disable narrator"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Identity key (the row's natural key; also the typed confirm value)."
+          },
+          "provider": {
+            "description": "Provider owning the key (skips the list scan).",
+            "type": "string",
+            "minLength": 1
+          },
+          "confirm": {
+            "description": "The identity KEY, to confirm (required non-interactively; checked locally and by the server).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "key-id"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "voice-identity revalidate",
+      "noun": "voice-identity",
+      "verb": "revalidate",
+      "aliases": [],
+      "summary": "Re-check a voice identity against the live provider (records definitive verdicts).",
+      "scopes": [
+        "identities:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.revalidate.output.json",
+      "examples": [
+        "agkit voice-identity revalidate narrator"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Identity key (the row's natural key, with its provider)."
+          },
+          "provider": {
+            "description": "Provider owning the key (skips the list scan).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "voice-identity delete",
+      "noun": "voice-identity",
+      "verb": "delete",
+      "aliases": [],
+      "summary": "HARD delete a voice identity — a live voice bound to this identity re-binds.",
+      "scopes": [
+        "identities:destroy"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.delete.output.json",
+      "examples": [
+        "agkit voice-identity delete narrator"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Identity key (the row's natural key, with its provider)."
+          },
+          "provider": {
+            "description": "Provider owning the key (skips the list scan).",
+            "type": "string",
+            "minLength": 1
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_voice_identity_plan",
+        "verb": "delete",
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "identities:destroy"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/voice-identity.delete.output.json"
+      }
+    },
+    {
+      "command": "media-quota get",
+      "noun": "media-quota",
+      "verb": "get",
+      "aliases": [],
+      "summary": "Show the project's media quotas (absent = not configured).",
+      "scopes": [
+        "quotas:read"
+      ],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-quota.get.output.json",
+      "examples": [
+        "agkit media-quota get"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_quota_read",
+        "verb": "get",
+        "discriminator": {
+          "param": "kind",
+          "value": "media"
+        },
+        "kind": "read",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "scopes": [
+          "quotas:read"
+        ],
+        "danger": "SR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-quota.get.output.json"
+      }
+    },
+    {
+      "command": "media-quota set",
+      "noun": "media-quota",
+      "verb": "set",
+      "aliases": [],
+      "summary": "Set ALL six media caps (each an explicit value or `unlimited`; prod-rebinding).",
+      "scopes": [
+        "quotas:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-quota.set.output.json",
+      "examples": [
+        "agkit media-quota set --max-image-generations-per-day 1000 --max-audio-seconds-per-day 36000 --max-video-generations-per-day unlimited --max-dubbing-jobs-per-day 50 --monthly-media-budget-usd 500.00 --media-budget-alert-threshold-usd 400.00"
+      ],
+      "args": {
+        "$comment": "unserializable: Transforms cannot be represented in JSON Schema"
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_quota_plan",
+        "verb": "set",
+        "discriminator": {
+          "param": "kind",
+          "value": "media"
+        },
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "quotas:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-quota.set.output.json"
+      }
+    },
+    {
+      "command": "media-quota clear",
+      "noun": "media-quota",
+      "verb": "clear",
+      "aliases": [],
+      "summary": "Clear named media caps to unlimited (other caps carried forward unchanged).",
+      "scopes": [
+        "quotas:write"
+      ],
+      "danger": "PR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-quota.clear.output.json",
+      "examples": [
+        "agkit media-quota clear --max-video-generations-per-day"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "max-image-generations-per-day": {
+            "description": "Clear the daily image-generation cap to unlimited.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "max-audio-seconds-per-day": {
+            "description": "Clear the daily audio-seconds cap to unlimited.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "max-video-generations-per-day": {
+            "description": "Clear the daily video-generation cap to unlimited.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "max-dubbing-jobs-per-day": {
+            "description": "Clear the daily dubbing-jobs cap to unlimited.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "monthly-media-budget-usd": {
+            "description": "Clear the monthly media budget to unlimited.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "media-budget-alert-threshold-usd": {
+            "description": "Clear the alert threshold to unset.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "confirm": {
+            "description": "The plan's confirm string (required to apply non-interactively; shown by the ceremony).",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": {
+        "challenge": "confirm-string"
+      },
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": {
+        "tool": "agkit_quota_plan",
+        "verb": "clear",
+        "discriminator": {
+          "param": "kind",
+          "value": "media"
+        },
+        "kind": "plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "scopes": [
+          "quotas:write"
+        ],
+        "danger": "PR",
+        "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/media-quota.clear.output.json"
+      }
+    },
+    {
+      "command": "mcp serve",
+      "noun": "mcp",
+      "verb": "serve",
+      "aliases": [],
+      "summary": "Run the agkit MCP server on stdio (stdout carries protocol frames only).",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/mcp.serve.output.json",
+      "examples": [
+        "agkit mcp serve"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "mcp doctor",
+      "noun": "mcp",
+      "verb": "doctor",
+      "aliases": [],
+      "summary": "Diagnose the MCP integration: client registration, credential, server, contract version.",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/mcp.doctor.output.json",
+      "examples": [
+        "agkit mcp doctor",
+        "agkit mcp doctor --offline"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "offline": {
+            "description": "Skip the server probe entirely: report the local checks only, with no network I/O.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "mcp print-config",
+      "noun": "mcp",
+      "verb": "print-config",
+      "aliases": [],
+      "summary": "Print the MCP client registration snippets for this machine (absolute binary path baked in); add --json to pipe them.",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/mcp.print-config.output.json",
+      "examples": [
+        "agkit mcp print-config"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "selftest run",
+      "noun": "selftest",
+      "verb": "run",
+      "aliases": [],
+      "summary": "Run end-to-end diagnostics (runtime, keychain, server, read/write path, skill & MCP).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/selftest.run.output.json",
+      "examples": [
+        "agkit selftest"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "upgrade run",
+      "noun": "upgrade",
+      "verb": "run",
+      "aliases": [],
+      "summary": "Update agkit to the latest release (npm-global installs only; others print the command).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/upgrade.run.output.json",
+      "examples": [
+        "agkit upgrade"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "dashboard open",
+      "noun": "dashboard",
+      "verb": "open",
+      "aliases": [],
+      "summary": "Open the management dashboard (optionally a page) in your browser.",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/dashboard.open.output.json",
+      "examples": [
+        "agkit dashboard",
+        "agkit dashboard account/security"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "page": {
+            "description": "Dashboard page to deep-link (e.g. 'account/security').",
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "api get",
+      "noun": "api",
+      "verb": "get",
+      "aliases": [
+        "GET"
+      ],
+      "summary": "Send a raw GET to a management path (escape hatch; query rides inline in <path>).",
+      "scopes": [],
+      "danger": "SR",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/api.get.output.json",
+      "examples": [
+        "agkit api get /v1/management/audit?limit=50"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Absolute management path, e.g. /v1/management/audit?limit=50 (query rides inline)."
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "api post",
+      "noun": "api",
+      "verb": "post",
+      "aliases": [
+        "POST"
+      ],
+      "summary": "Send a raw POST to a management path (body via --input; M-class confirm).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/api.post.output.json",
+      "examples": [
+        "agkit api post /v1/management/projects --input ./body.json"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Absolute management path, e.g. /v1/management/projects (an inline ?query is allowed)."
+          },
+          "input": {
+            "description": "Request body source: a file path, or '-' to read stdin. Bodies are out-of-band — never argv.",
+            "type": "string",
+            "minLength": 1
+          },
+          "field": {
+            "description": "A query parameter key=value (repeatable). Allowlisted non-secret params only, e.g. limit=50.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "api put",
+      "noun": "api",
+      "verb": "put",
+      "aliases": [
+        "PUT"
+      ],
+      "summary": "Send a raw PUT to a management path (body via --input; M-class confirm).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/api.put.output.json",
+      "examples": [
+        "agkit api put /v1/management/projects/example-id --input ./body.json"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Absolute management path, e.g. /v1/management/projects (an inline ?query is allowed)."
+          },
+          "input": {
+            "description": "Request body source: a file path, or '-' to read stdin. Bodies are out-of-band — never argv.",
+            "type": "string",
+            "minLength": 1
+          },
+          "field": {
+            "description": "A query parameter key=value (repeatable). Allowlisted non-secret params only, e.g. limit=50.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "api patch",
+      "noun": "api",
+      "verb": "patch",
+      "aliases": [
+        "PATCH"
+      ],
+      "summary": "Send a raw PATCH to a management path (body via --input; M-class confirm).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/api.patch.output.json",
+      "examples": [
+        "agkit api patch /v1/management/projects/example-id --input ./body.json"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Absolute management path, e.g. /v1/management/projects (an inline ?query is allowed)."
+          },
+          "input": {
+            "description": "Request body source: a file path, or '-' to read stdin. Bodies are out-of-band — never argv.",
+            "type": "string",
+            "minLength": 1
+          },
+          "field": {
+            "description": "A query parameter key=value (repeatable). Allowlisted non-secret params only, e.g. limit=50.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "api delete",
+      "noun": "api",
+      "verb": "delete",
+      "aliases": [
+        "DELETE"
+      ],
+      "summary": "Send a raw DELETE to a management path (M-class confirm).",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/api.delete.output.json",
+      "examples": [
+        "agkit api delete /v1/management/projects/example-id"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Absolute management path, e.g. /v1/management/projects (an inline ?query is allowed)."
+          },
+          "input": {
+            "description": "Request body source: a file path, or '-' to read stdin. Bodies are out-of-band — never argv.",
+            "type": "string",
+            "minLength": 1
+          },
+          "field": {
+            "description": "A query parameter key=value (repeatable). Allowlisted non-secret params only, e.g. limit=50.",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "init run",
+      "noun": "init",
+      "verb": "run",
+      "aliases": [],
+      "summary": "Set up a project end to end: project, publishable key, provider credential, default routes, repo files.",
+      "scopes": [
+        "projects:write",
+        "keys:write",
+        "provider-keys:write",
+        "routes:write"
+      ],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/init.run.output.json",
+      "examples": [
+        "agkit init",
+        "agkit init --project-name my-app --key-name my-app"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "project-name": {
+            "description": "Create a NEW project with this name (mutually exclusive with the global --project).",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "key-name": {
+            "description": "Label for the publishable key to mint (default: '<repo> (init)').",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "provider": {
+            "description": "Provider slug to store a credential for (server-owned vocabulary); pairs with --api-key-env.",
+            "type": "string",
+            "minLength": 1
+          },
+          "api-key-env": {
+            "description": "Name of the env var holding the provider API key (the key never rides argv).",
+            "type": "string",
+            "minLength": 1
+          },
+          "reuse-key": {
+            "description": "Reuse the existing publishable key with the same name instead of minting another.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "rotate-credential": {
+            "description": "The named provider already has a credential: rotate it deliberately instead of skipping.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "remote",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    },
+    {
+      "command": "setup run",
+      "noun": "setup",
+      "verb": "run",
+      "aliases": [],
+      "summary": "Provision this machine for agents: install the agkit skill, register the MCP server, and add the agkit block to AGENTS.md.",
+      "scopes": [],
+      "danger": "M",
+      "outputSchemaId": "https://schemas.agkit.cloud/cli/v1/setup.run.output.json",
+      "examples": [
+        "agkit setup",
+        "agkit setup --check",
+        "agkit setup --client codex"
+      ],
+      "args": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "check": {
+            "description": "Report what would change and write NOTHING: exit 1 if anything is out of date, 0 when converged.",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          },
+          "client": {
+            "description": "Also register with this MCP client's own config (codex: ~/.codex/config.toml).",
+            "type": "string",
+            "enum": [
+              "codex"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "route_status": "implemented",
+      "confirm": null,
+      "reserved": null,
+      "execution": "local",
+      "requiredCapabilities": null,
+      "reservedRoute": null,
+      "mcp": null
+    }
+  ]
+}

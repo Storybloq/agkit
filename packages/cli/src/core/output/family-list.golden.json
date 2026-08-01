@@ -1,0 +1,22 @@
+{
+  "family": "list",
+  "purpose": "A COMPLETE page: `data` is an array, no `partial`, no `meta.next_cursor`, exit 0. The floor case for every list command in the registry.",
+  "cases": [
+    {
+      "name": "project list, one complete page",
+      "argv": [
+        "project",
+        "list",
+        "--json",
+        "--retries",
+        "0"
+      ],
+      "provenance": "management-project.list.response.json, transformed to a COMPLETE page (has_more:false, next_cursor deleted). Deleted rather than nulled: the list-envelope invariant is checked by own-property presence (paginate.ts:96-108), so a null cursor on a final page is a protocol violation and would record an error instead of a list.",
+      "rendered": {
+        "stdout": "{\n  \"version\": 1,\n  \"data\": [\n    {\n      \"object\": \"project\",\n      \"id\": \"00000000-0000-4000-b000-00000000900d\",\n      \"name\": \"golden-contract\",\n      \"created_at\": \"2026-07-15T01:12:45.480Z\",\n      \"app_attest_app_id\": null,\n      \"app_attest_environment\": \"production\"\n    }\n  ]\n}\n",
+        "stderr": "",
+        "exitCode": 0
+      }
+    }
+  ]
+}

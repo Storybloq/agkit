@@ -1,0 +1,243 @@
+{
+  "management_version": "1.2.0",
+  "ratified": "2026-07-06",
+  "$comment": "ADDITIVE MINOR over management/v1.0.1 (T-270; v1.0.1 authored at T-194; v1.0.0 first published at T-188 / epic cli-mcp-mgmt-plane). The management contract namespace: the REST wire for the dashboard + CLI (@shyegg/agkit) + MCP (agkit_*) — independently versioned from the streaming contract_version/wire_minor and the media-* namespaces. A management cut NEVER moves contract_version/wire_minor and touches NO byte of headers.json (CON-2; git-diff asserted in the freeze checklist). Cloud-owned single source of truth; immutable annotated tag management/v1.2.0 (owner-cut; additive minor over management/v1.1.0 — the T-217 wave adds model_route.defaults, the R-B BYO-endpoint provider_credential members, and the R-C checkout email required→optional relaxation). Goldens are RECORDINGS from real handlers at TAIL-FREEZE, never hand-authored (CON-7/CON-9). Count-lock: 88 scope-gated resource ops / 141 total route-registry entries / 24 problem codes (see management-routes.json and management-errors.json; v1.2.0 adds model_route.defaults — the recommended-defaults catalog read).",
+  "meta": {
+    "version_negotiation": {
+      "request_header": "X-AgentKit-Management-Version",
+      "response_header": "X-AgentKit-Management-Version",
+      "value_format": "full semver the client was built against (see management-version-header.schema.json)",
+      "policy": "MAJOR mismatch -> 400 problem version_unsupported (fail-closed; ext supported_major). ABSENT request header -> accepted, treated as CURRENT major (curl/exploration ergonomics; CLI/MCP MUST always send it). EVERY response echoes the server's current version in the response header.",
+      "pinned_here_not_headers_json": true
+    },
+    "route_status": {
+      "vocabulary": ["implemented", "reserved", "deprecated_alias"],
+      "auth_annotated_flag": "boolean column on every management-routes.json entry; true for the 9 discovery/self/oauth/well-known rows (A001-A009). RN-5 binds the status enum to 3 values — auth is a FLAG, not a status.",
+      "generator_rule": "CLI/MCP generators exclude route_status==='reserved' AND auth_annotated===true from default help / tools/list; deprecated_alias surfaces only under a deprecation notice."
+    },
+    "idempotency": {
+      "request_header": "Idempotency-Key",
+      "replay_header": "Idempotency-Replayed",
+      "applies_to": "every mutating POST marked idempotency:required in management-routes.json (Stripe model; PUT/PATCH/DELETE are idempotent via If-Match). PL-13: direct_confirm emergency POSTs ALSO require Idempotency-Key.",
+      "semantics": "missing on a required route -> 400 invalid_request (+hint). same key + same SHA-256 request fingerprint -> stored status/body verbatim + Idempotency-Replayed:true. same key + different fingerprint -> 422 idempotency_key_conflict. same key while in-flight -> 409 idempotency_in_flight (retry_with_backoff). keys are per-principal; 24h retention.",
+      "secret_safety": "mint/rotate replay bodies store the secret field as null + secret_unavailable:true + recovery hint; raw bodies stored only as fingerprints (honor-or-reject)."
+    },
+    "pagination": {
+      "style": "cursor-based, Stripe-shaped",
+      "request_params": { "limit": "1..200, default 50", "cursor": "opaque base64url; clients MUST treat as opaque; server signs nothing; every page re-runs authz" },
+      "envelope": "{ object:'list', data:[...], has_more, next_cursor }  (management-list.schema.json)",
+      "invariants": "next_cursor present IFF has_more. zero-state = {object:'list',data:[],has_more:false} (never an error). NON-paginated lists return the SAME envelope with has_more:false ALWAYS — ONE list shape for consumers.",
+      "ordering": "deterministic per resource, declared in the route registry (created_at DESC,id DESC default; audit/usage support since/until windows)"
+    },
+    "concurrency": {
+      "etag": "strong, \"sha256:<hex>\" over the canonical (sorted-key, volatile-free) DTO serialization; identical to the GET ETag response header; list items carry it inline as `etag`.",
+      "if_match": "PATCH/PUT/DELETE on if_match routes: missing If-Match -> 400 invalid_request (+hint 'fetch and pass If-Match'); mismatch -> 412 precondition_failed (+ext current_etag).",
+      "if_none_match": "If-None-Match:* on natural-key upsert routes (media-route/{capability}, voice-identity/{provider}/{key}, revenuecat) = create-fail-if-exists; plan-gated routes reach upsert only through apply.",
+      "plan_reuse": "plans reuse the same hashes as preconditions (state_hash) — one mechanism, two entry points."
+    },
+    "plan_apply": {
+      "object": "plan (management-plan.schema.json)",
+      "create": "POST /v1/management/plans — side-effect-free on managed state; validates each change against the SAME Ajv request schema as the direct route; computes a redacted structured diff; auto-derives ETag/absence preconditions; state_hash = sha256 over sorted preconditions (one drift fingerprint).",
+      "apply": "POST /plans/{id}/apply (Idempotency-Key required) — one DB tx: re-derive every precondition, ANY drift -> rollback + 409 plan_stale (ext drifted[]); expiry -> 410 plan_expired; re-apply new key -> 409 plan_already_applied; replay original key -> stored redacted response. Requires the UNION of write scopes of all changes at apply time (a plan never launders privilege).",
+      "confirm": "when the plan's max danger is in {D,PR}, apply requires a top-level `confirm` matching the plan's server-emitted `confirm_string`; mismatch -> 422 confirm_required.",
+      "limits": "single-project, <=20 changes, default 15-min (900s) expiry; expires_in_seconds requestable in 60..3600s (inclusive). Secret change payloads encrypted at rest (AES-256-GCM keyring); diffs/results render secrets as \"(secret)\".",
+      "gating_vocabulary": {
+        "free": "SR reads — callable directly",
+        "direct": "M mutations — callable directly",
+        "direct_confirm": "emergency-class D (revokes, kill-switch engage, admin TOTP reset) PLUS the two external-validation PR ops (identity.toggle, revenuecat.upsert — v1.1.0: non-transactional server-side validation makes them plan-inexecutable, so the confirm-gated direct path is their write path) — direct call carries a server-verified top-level `confirm` = resource/project name; mismatch -> 422 confirm_required",
+        "plan_required": "all PR + remaining D EXCEPT the two external-validation PR ops re-gated to direct_confirm at v1.1.0 (identity.toggle, revenuecat.upsert) — direct mutation rejected 403 plan_required; only write path is plan->apply",
+        "exception": "profile.sync (A416) is the SINGLE allow-listed PR-`direct` op (OD-5) — the CON-5 gating-lock's sole exception"
+      }
+    },
+    "canonical_resources": {
+      "set": ["https://api.agkit.cloud", "https://api.agkit.cloud/mcp"],
+      "$comment": "EXTENSIBLE SET, pinned at wave-1 freeze so wave-2 /mcp clients can obtain a /mcp-audience token (a wave-1-only pin would strand them). https://api.agkit.cloud = the mgmt resource (this plane). https://api.agkit.cloud/mcp = the remote-MCP resource server (reserved wave-2).",
+      "mutual_rejection": "a token whose audience is the mgmt resource is REJECTED at /mcp, and a /mcp-audience token is REJECTED on the mgmt plane. Clients MUST send resource=<one of the set> (RFC 8707); the AS binds token audience from it.",
+      "as_metadata": {
+        "issuer": "https://api.agkit.cloud",
+        "authorization_endpoint": "<dashboard-origin>/oauth/authorize (A009 — split origin, NOT the api Hono router)",
+        "token_endpoint": "https://api.agkit.cloud/v1/management/oauth/token (A005)",
+        "device_authorization_endpoint": "https://api.agkit.cloud/v1/management/oauth/device_authorization (A004)",
+        "revocation_endpoint": "https://api.agkit.cloud/v1/management/oauth/revocation (A006)",
+        "code_challenge_methods_supported": ["S256"],
+        "note": "full AS metadata is D2's surface; management.json pins ONLY the canonical-resource SET + mutual-rejection rule + the authorization_endpoint that A009's drift carve-out asserts against."
+      }
+    },
+    "reserved": {
+      "knowledge": {
+        "status": 501,
+        "problem_code": "not_implemented",
+        "route_ids": "A901-A927 (27 paths; see management-routes.json route_status:reserved, family:knowledge)",
+        "scopes": ["knowledge:read", "knowledge:write"],
+        "unblocking_ticket": "cloud:T-165 must land in main; epic ticket T-AB cuts the additive management MINOR",
+        "reconciliation_rule": "T-165's LANDED implementation is ground truth for internals/behavior; THIS reservation is ground truth for wire conventions (paths, verbs, envelopes, problem codes, pagination, gating classes). Schemas + goldens are RECORDED from the landed handlers, never authored against the unshipped worktree. The knowledge scope column is PROVISIONAL — destructive ops (A905/A909/A910, danger D) map to knowledge:write NOT knowledge:destroy (verbatim per the reservation; reconciled at un-reserve). knowledge_akd / knowledge_chunks NEVER get routes; platform-default embedding-route (project_id NULL) partitioned out."
+      },
+      "admin": {
+        "status": 501,
+        "problem_code": "not_implemented",
+        "route_ids": "A801-A807 (7 paths)",
+        "scopes": [],
+        "unblocking_ticket": "admin-plane MINOR after D2 user-principal (superadmin+TOTP) auth is proven (OD-3)",
+        "reconciliation_rule": "user-principal superadmin+TOTP ONLY; mgmt_* tokens ALWAYS 403 forbidden; mounted on app_admin (NOT app_mgmt) when un-reserved. No route mints superadmins, creates accounts, or touches users.platform_role. whoami/self NEVER reveal platform_role. NO admin:* scope string exists (OD-C); admin rows carry family '-', scope 'none (superadmin)'."
+      },
+      "teams": {
+        "status": 501,
+        "problem_code": "not_implemented",
+        "route_ids": "A108-A112 (5 paths: member.update/remove + invitation.list/create/revoke)",
+        "scopes": ["account:write", "account:destroy"],
+        "unblocking_ticket": "teams MINOR (OD-G) — members-writes + invitations ship together once D2's email-token flow lands",
+        "reconciliation_rule": "member.list (A107) is the ONLY teams surface live at v1 (account:read); empirically dead today (1 member/account). Paths+scopes pinned now, return 501 until landed."
+      }
+    },
+    "error_boundary": {
+      "resource_plane": "ALL /v1/management/* resource errors are application/problem+json (RFC 9457; management-problem.schema.json) — including body-limit, rate-limit, auth-middleware, and catch-all paths. type URIs live under https://contract.agentkit.cloud/problems/management/<code>; `code` is the primary machine key.",
+      "oauth_plane": "the OAuth/AS endpoints (A004 device, A005 token, A006 revocation, A007/A008 .well-known) speak RFC 6749/8414 error format ({error, error_description, error_uri}), NOT RFC 9457 — OAuth clients expect it. 401 resource responses set WWW-Authenticate: Bearer (RFC 6750 error/scope params) — the hook the MCP resource-server metadata extends.",
+      "legacy_flip": "the 3 legacy aliases (A951-A953) move from flat {type:'error',code,message}/{error:...} to RFC 9457 at freeze (regression test: no /v1/management/* body matches {\"error\": or {\"type\":\"error\")."
+    },
+    "vocabularies": {
+      "closed_fail_loud": {
+        "http_methods_per_route": "producer & consumer",
+        "plan_status": ["open", "applied", "discarded", "expired"],
+        "plan_change_action": ["create", "update", "delete", "invoke"],
+        "danger": ["SR", "M", "D", "PR"],
+        "gating": ["free", "direct", "direct_confirm", "plan_required"],
+        "retry": ["none", "refresh_auth", "retry_with_backoff"]
+      },
+      "closed_graceful_postel": {
+        "problem_code": "EXACTLY 24 at v1.1.0 (management-errors.json codes[]); strict producer (conformance-locked), tolerant consumer (unknown code -> generic handling by status class, never a crash). Additive-only afterwards."
+      },
+      "open_additive_no_bump": {
+        "scope_names": "family:verb, read<write<destroy ladder, write-implies-read; unknown scope in a token = ignored fail-closed; unknown at consent = invalid_scope. Canonical enumeration rides meta.scope_registry (APX-C).",
+        "resource_object_type_names": "e.g. 'model_route', 'plan', 'list'",
+        "conflict_reason": ["tier_exists", "slug_exists", "name_exists", "already_configured", "kind_immutable", "duplicate_key", "revalidation_stale", "switch_state_changed"],
+        "audit_action_names": true,
+        "route_list": "grows additively via minor (danger levels themselves are closed)"
+      }
+    },
+    "scope_registry": {
+      "$comment": "AUTH-26/OD-A4 — the canonical APX-C scope vocabulary (N-011 C01-C20), authored in-window pre-T-202-freeze (backfills the L0-A gap). OPEN additive vocabulary (additions need no version bump). 48 (family,verb) entries across 20 families. Verb ladder read<write<destroy per family: write-implies-read, destroy-implies-write, NEVER cross-family (AUTH-27/AUTH-29). Unknown scope in a stored token = inert fail-closed (grants nothing); unknown at consent/mint = invalid_scope. 6 entries are registered-reserved (C.4: knowledge:read, knowledge:write, account:write, account:destroy, jobs:write, media-routes:destroy) — the string exists now, consent UI may render it, but no endpoint requires it until its surface lands. NO admin:* family exists, structurally (OD-C/ADJ-5). Derivation rules, cross-checked against management-routes.json: danger = the max class over the route ops the scope gates (D if any gated op is D or PR+D; else PR; else M; else SR — which is why plans:read carries M: plan.discard A705 is an M op gated by plans:read, and revenuecat:destroy carries PR: A429 is danger PR on the wire); prod_rebinding = the scope gates at least one PR-classed op (incl. the PR half of PR+D and the disengage branch of A506); mintable_on_ci = false EXACTLY for tokens:write (SEC-6/AUTH-23 — no token-to-token self-replication) and tokens:destroy (ladder closure: destroy implies write, so the ban must cover it).",
+      "verb_ladder": ["read", "write", "destroy"],
+      "entries": [
+        { "family": "projects", "verb": "read", "description": "List/get projects + project summary.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "projects", "verb": "write", "description": "Create (plan-capped) / rename / attestation config.", "danger": "M", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "projects", "verb": "destroy", "description": "Archive a project.", "danger": "D", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "keys", "verb": "read", "description": "List/get publishable keys (masked).", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "keys", "verb": "write", "description": "Mint a publishable key (secret shown once).", "danger": "M", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "keys", "verb": "destroy", "description": "Revoke a publishable key (bricks shipped apps).", "danger": "D", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "tokens", "verb": "read", "description": "List/get management tokens (masked).", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "tokens", "verb": "write", "description": "Mint management tokens (requested scopes must be a subset of the minter's; owner role required, A306). NEVER mintable on CI — no token-to-token self-replication (SEC-6/AUTH-23).", "danger": "M", "prod_rebinding": false, "mintable_on_ci": false },
+        { "family": "tokens", "verb": "destroy", "description": "Revoke a management token. Also not CI-mintable: destroy implies write on the ladder, so the SEC-6 self-replication ban closes over it.", "danger": "D", "prod_rebinding": false, "mintable_on_ci": false },
+        { "family": "issuers", "verb": "read", "description": "List/get trusted issuers.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "issuers", "verb": "write", "description": "Add/update trusted issuers (kind immutable).", "danger": "PR", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "issuers", "verb": "destroy", "description": "Hard-delete a trusted issuer (locks out live end-users; PR+D on the wire).", "danger": "D", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "provider-keys", "verb": "read", "description": "Provider-credential metadata only — never the secret.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "provider-keys", "verb": "write", "description": "Add / rotate provider credentials (rotate is prod-rebinding).", "danger": "PR", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "provider-keys", "verb": "destroy", "description": "Revoke a provider credential (PR+D on the wire).", "danger": "D", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "routes", "verb": "read", "description": "List/get model routes (tier-to-model bindings).", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "routes", "verb": "write", "description": "Create/update model routes — tiers + execution targets against fail-closed registries (the North-Star knob).", "danger": "PR", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "routes", "verb": "destroy", "description": "Hard-delete a model route (PR+D on the wire).", "danger": "D", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "agents", "verb": "read", "description": "List/get agent profiles and their tools.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "agents", "verb": "write", "description": "Create/update/sync profiles + within-profile tool CRUD incl. tool delete (RN-3).", "danger": "PR", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "agents", "verb": "destroy", "description": "Hard-delete an agent profile (cascades tools + kb-bindings; PR+D on the wire).", "danger": "D", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "media-routes", "verb": "read", "description": "List/get media routes (capability-to-provider+model bindings).", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "media-routes", "verb": "write", "description": "Upsert / toggle media routes (the North-Star knob).", "danger": "PR", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "media-routes", "verb": "destroy", "description": "RESERVED (s4 flag #3): no server delete op exists at v1 — registered so the string renders at consent; would be PR+D when a delete op lands.", "danger": "D", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "identities", "verb": "read", "description": "List/get voice identities.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "identities", "verb": "write", "description": "Upsert / toggle / revalidate voice identities (upsert+toggle prod-rebinding; revalidate M).", "danger": "PR", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "identities", "verb": "destroy", "description": "Hard-delete a voice identity (PR+D on the wire).", "danger": "D", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "quotas", "verb": "read", "description": "Read agent + media quotas (+ knowledge quotas when the knowledge minor lands).", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "quotas", "verb": "write", "description": "Upsert quotas, including clearing them. Upsert-only family — no destroy verb exists.", "danger": "PR", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "killswitch", "verb": "read", "description": "Read project kill-switch state.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "killswitch", "verb": "write", "description": "Engage (D, direct_confirm, reason required) / disengage (PR, plan-gated) the PROJECT kill switch — asymmetric by design (d1 s4.6); no killswitch:destroy verb exists.", "danger": "D", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "revenuecat", "verb": "read", "description": "Read the RevenueCat binding (never the key).", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "revenuecat", "verb": "write", "description": "Upsert the RevenueCat binding.", "danger": "PR", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "revenuecat", "verb": "destroy", "description": "Disable RevenueCat (hard-deletes the binding row; danger PR on the wire, A429).", "danger": "PR", "prod_rebinding": true, "mintable_on_ci": true },
+        { "family": "billing", "verb": "read", "description": "Billing info, monthly usage, plans catalog.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "billing", "verb": "write", "description": "Checkout / billing portal (money movement; browser-URL human flows).", "danger": "M", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "account", "verb": "read", "description": "Account info + member list (RN-2 members fold).", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "account", "verb": "write", "description": "RESERVED (teams minor, OD-G): member role updates + invitations. Registered now; no endpoint requires it until the teams minor lands (A108/A111/A112 return 501).", "danger": "D", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "account", "verb": "destroy", "description": "RESERVED (teams minor, OD-G): member removal (A109 returns 501 until landed).", "danger": "D", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "usage", "verb": "read", "description": "Agent usage series/requests/top users, end-users, media usage.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "audit", "verb": "read", "description": "Read the audit log (paginated).", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "jobs", "verb": "read", "description": "List/get media jobs — read ACTIVE at v1 (RN-4b/OD-R).", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "jobs", "verb": "write", "description": "RESERVED (OD-R): media-job cancel, pending a provider-capability spike — no cancel route exists at v1 (APX-D pins the op danger D).", "danger": "D", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "attest", "verb": "read", "description": "List enrolled attested device keys.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "attest", "verb": "destroy", "description": "Revoke an attested device key (OD-H). No attest:write verb is registered — the family skips write.", "danger": "D", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "plans", "verb": "read", "description": "Plan-object list/get + discarding OWN plans — plan.discard (A705) is danger M and gated by plans:read (d1 s5), so this read verb carries M. No plans:write exists: plan.create derives read-level scopes of the contained changes; plan.apply requires the union of their write scopes at apply time (RN-4a).", "danger": "M", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "knowledge", "verb": "read", "description": "RESERVED (T-AB; blocked on cloud:T-165 — OD-SEQ): knowledge-plane reads; 501 until the knowledge minor lands.", "danger": "SR", "prod_rebinding": false, "mintable_on_ci": true },
+        { "family": "knowledge", "verb": "write", "description": "RESERVED (T-AB): ALL knowledge mutations INCLUDING destructive ops — bank/document delete + purge fold to knowledge:write, NOT knowledge:destroy (reservation reconciliation; re-reconciled at un-reserve). Prod-rebinding (index build/activate, bindings, embedding-route).", "danger": "D", "prod_rebinding": true, "mintable_on_ci": true }
+      ]
+    },
+    "token_classes": {
+      "$comment": "AUTH-64 — token-class meta rides management.json meta ONLY, never headers.json. The 4 token classes of the management-plane credential model (T-192/AUTH-19..23, D2). Every class shares the same body: 43 rejection-sampled base-62 chars (~256 bits of entropy, the shipped mgmt_ generator); total_len = prefix length + 43 (mgmt_ = 5 -> 48; mgmt_ci_/mgmt_at_/mgmt_rt_ = 8 -> 51). SHA-256-hex at rest; display form {prefix12}...{4}; token VALUES never logged/stored. Pre-hash shape check accepts exactly these 4 (prefix,total_len) pairs and rejects everything else (AUTH-22). ttl_default/ttl_max are mint-time bounds (AUTH-21/OD-U): expiry is REQUIRED for every non-legacy class and violations are invalid_request naming the bound. Post-migration NO path (dashboard included) may mint a new legacy/scope-less/non-expiring token. A mgmt_rt_ refresh token presented anywhere except the token endpoint is rejected auth_invalid (AUTH-17).",
+      "classes": [
+        { "class": "legacy", "prefix": "mgmt_", "body_len": 43, "total_len": 48, "mintable_on_ci": false, "ttl_default": null, "ttl_max": null, "note": "Non-expiring grandfathered primitive (scope behavior per meta.auth_model.grandfather_rule; OD-D backfill widens live rows to {agents:write, billing:write} + project binding). Post-migration NO path may mint a new legacy token (AUTH-21/OD-U)." },
+        { "class": "ci", "prefix": "mgmt_ci_", "body_len": 43, "total_len": 51, "mintable_on_ci": true, "ttl_default": "90d", "ttl_max": "366d", "note": "Long-lived automation token minted via management_token.create (A306) by a session-class principal holding tokens:write; requested scopes must be a subset of the minter's; tokens:write/tokens:destroy are never CI-mintable (SEC-6 — no token-to-token self-replication)." },
+        { "class": "access", "prefix": "mgmt_at_", "body_len": 43, "total_len": 51, "mintable_on_ci": false, "ttl_default": "1h", "ttl_max": "8h", "note": "Short-lived OAuth access token issued against a grant (auth-code+PKCE or device flow, AUTH-14/s1.5); scopes bounded by the grant." },
+        { "class": "refresh", "prefix": "mgmt_rt_", "body_len": 43, "total_len": 51, "mintable_on_ci": false, "ttl_default": "30d", "ttl_max": "90d", "note": "OAuth refresh token: ttl_default = 30d IDLE window, ttl_max = 90d ABSOLUTE from grant. Rotation mandatory + atomic on every use (PL-07); a refresh may narrow scope, never widen; accepted ONLY at the token endpoint — anywhere else -> auth_invalid (AUTH-17)." }
+      ]
+    },
+    "provider_vocabulary": {
+      "$comment": "T-196 (D-5/★★★R4-4/✦R5-4): the CLOSED set of provider slugs a project may store a credential for (provider_credential.create). AUTHORED HERE as the single source of truth (ADDITIVE meta; no $def bytes narrowed) — the shared wire-contract accessor (providerVocabulary()) IS the 'code registry', and the credential.create handler enforces membership from it -> 422 validation_failed on an unknown provider (never narrowed on the wire $def; the $def keeps provider as a min-length string so a registry addition is not a contract change). This MIRRORS the code-side CREDENTIAL_PROVIDERS union (packages/shared/src/domain/index.ts) — the providers a project can hold credentials for, media providers included. It is a DIFFERENT vocabulary from MODEL_PROVIDERS (model routing), which is NOT consulted here (✦R5-4). Three-way parity (contract meta <=> code registry <=> handler acceptance) is pinned by the handler's parity test. OPEN additive vocabulary: a new provider is one entry here + one in CREDENTIAL_PROVIDERS, no version bump.",
+      "providers": ["anthropic", "openai", "gemini", "elevenlabs", "veo", "openai-compatible", "xai", "gcp-stt"]
+    },
+    "credential_field_limits": {
+      "$comment": "T-196 (✧R8-2/✦✦✦R7-4, rev-4 secret-disclosure fix): the EXACT contract-visible limits on a provider credential's secret field. api_key_max_utf8_bytes is an exact UTF-8 BYTE bound (NOT a JS string length) — the handler reads it through the wire-contract accessor (credentialApiKeyMaxBytes()) and enforces it on the secret member BEFORE encoding-variant generation; oversized -> 422 validation_failed naming the bound (no received value). api_key_min_length is a MINIMUM JS-string CODE-POINT length (not bytes), set to 2× the fixed 8-char display prefix + 1 so the masked prefix always reveals STRICTLY LESS than half of the secret (a 1–8 char secret's 8-char prefix would BE the whole secret, disclosing the plaintext at rest / in the audit / as masked_secret); the api extractor enforces it before custody registration -> 422 validation_failed naming the bound (no received value). Both are code-side defenses: the $def deliberately stays {type:string,minLength:1} (the placeholder mechanism needs a loose $def and the loose-wire pattern keeps limits/vocabularies in META, never narrowed on the wire). Multibyte-boundary cases pinned. Exposed additively in meta so consumers can pre-validate without a version bump. T-296 C11: raised 4096 -> 8192 (uniform bound; GCP service-account JSON credentials routinely exceed 4 KiB — same additive-meta rule, no version bump).",
+      "api_key_max_utf8_bytes": 8192,
+      "api_key_min_length": 17,
+      "byo_endpoint_url_max_utf8_bytes": 2048,
+      "byo_header_name_max_length": 128,
+      "byo_extra_headers_max_members": 5,
+      "byo_extra_headers_value_max_bytes": 1024,
+      "$comment_byo": "v1.2.0 (RR-5c re-derived): the R-B BYO-endpoint (openai-compatible) member caps, enforced on the wire by the provider_credential_create_request $def (endpoint_url maxLength 2048; header_name maxLength 128; extra_headers maxProperties 5 == the allowlist size; each extra_headers value maxLength 1024). The extra_headers TOTAL is bounded BY CONSTRUCTION (≤5 members × ≤1024 bytes ≈ 5.2 KiB) so there is NO separate total cap to keep in sync (r2's 20×1024+4096-total is retired). These caps are documentary here (the $def is the enforcer); byte==char by the ASCII-only value grammar."
+    },
+    "media_route_config_limits": {
+      "$comment": "T-197 (D5/OD-14): the EXACT contract-visible ceiling on a media_route `config` pass-through blob (media_route_upsert_request.config). config_max_utf8_bytes is an exact UTF-8 BYTE bound (NOT a JS string length) measured over the CANONICAL JSON.stringify of the config AFTER the forbidden-key/depth/shape custody walk passes — the config guard (validateMediaRouteConfig) reads it through the wire-contract accessor (mediaRouteConfigMaxBytes()) and enforces it -> 422 validation_failed naming the bound (received values NEVER echoed). It is a code-side defense: the $def deliberately stays {type:object} (limits/custody live in META, never narrowed on the wire, so a limit change is not a contract change). 16384 bytes = 16 KiB, a generous ceiling for provider knobs while bounding the jsonb the projection hashes. Exposed additively in meta so consumers can pre-validate without a version bump.",
+      "config_max_utf8_bytes": 16384
+    },
+    "byo_endpoint_security": {
+      "$comment": "v1.2.0 (R-B + RR-5/RR-6): the server-side egress + custody policy for openai-compatible BYO endpoints. The wire $def is only the FIRST fence; the authoritative defenses live in code and are recorded here so consumers understand the honor-or-reject boundary.",
+      "ip_classification": "allow-global-unicast-only (RR-6a): an endpoint host that resolves to any address NOT classified as globally-reachable unicast is DENIED (private/loopback/link-local/CGNAT/multicast/reserved/unique-local/NAT64/6to4/Teredo/broadcast). Implemented via an exact-pinned ipaddr.js range() classification (denylist-as-definition is forbidden; the full IANA special-purpose registry is the TEST fixture, not the live rule). V4-MAPPED IS DECODED, NOT BLANKET-DENIED: ipaddr.process() unwraps ::ffff:a.b.c.d to its embedded IPv4 and the EMBEDDED address is what gets classified, so ::ffff:10.0.0.1 and ::ffff:169.254.169.254 are denied (private / link-local) while ::ffff:8.8.8.8 is ALLOWED — it genuinely names a public target, and refusing it would be a false denial. The other embedding families are NOT decoded because they do not need to be: NAT64-rfc6052, 6to4, and Teredo each classify as their OWN named non-unicast range and are therefore denied wholesale under the allow-only rule.",
+      "self_cidrs_required_in_production": "EGRESS_GUARD_SELF_CIDRS (RR-6b): comma-separated CIDRs of the box's own/LB/infra addresses OR the literal sentinel 'none'. MISSING or MALFORMED in production ⇒ the process REFUSES TO START (loadKeyring / OAuth-half-set-pair fail-boot precedent). These CIDRs join the DENY side (hairpin fix). Non-production: absent ⇒ 'none' + one boot log line.",
+      "dns_precheck": "assertPublicEndpointDns (RR-6c): a bounded c-ares dns.promises.Resolver ({timeout:1000, tries:1}) resolve4+resolve6 under a 2 s overall deadline (Promise.race + resolver.cancel(), off the libuv threadpool) + a process-wide 8-permit semaphore. EVERY returned address must classify ALLOWED; empty/NXDOMAIN ⇒ validation_failed; timeout/resolver failure ⇒ service_unavailable (existing classes — no new error code, no resolver detail in the message). Advisory fast-fail; G4 is the authoritative rebinding defense.",
+      "connect_time_guard": "createEgressGuardedDispatcher (RR-6e): an undici Agent whose custom connect.lookup resolves then REJECTS any denied address; the SAME resolution feeds the socket ⇒ zero TOCTOU (rebinding cannot retarget an open TCP socket). The openai-compatible dispatch arm passes this dispatcher + redirect:'error' (3xx refused — media xai-images precedent). Failure surfaces as the existing provider_unavailable class.",
+      "two_plane_failure_labelling": "WHY a rejected stored config surfaces to the APP as the streaming plane's provider_unavailable (503) and NOT as a configuration error, even though the fault is configuration: the two planes have different audiences and §A gives each the only label it can act on. The APP expressed INTENT (a tier) and never named a provider, an endpoint, or a credential — it holds no config, so 'your configuration is invalid' would be unactionable and would leak realization detail the client is deliberately blind to (§B-2 absence on the wire). What is true from the app's position is exactly that the configured provider cannot serve the request ⇒ provider_unavailable. The OPERATOR, who can act, gets the precise signal on the CONTROL plane instead: provider_credential.config_status === 'rejected' on the credential read (and in project.summary), meaning the stored config fails the current closed parser, is neither echoed nor dispatched, and must be ROTATED. So the fault is reported once, honestly, to each audience in the vocabulary that audience can use — not mislabelled and not duplicated. This also avoids a new error code: both plane tables (24 streaming codes / 24 management codes) stay closed and untouched by this tag.",
+      "url_grammar": "endpoint_url: https only; FRAGMENT illegal (RR-6d — fetch drops fragments so a stored fragment would differ from the wire); userinfo illegal (RR-5d); r4 non-secret URL-query policy — a query-parameter NAME matching the secret-field policy (key/api[-_]key/token/secret/signature/sig/credential/password/authorization forms, case-insensitive) is REJECTED before persistence; non-secret params (e.g. Azure api-version) pass.",
+      "header_value_grammar": "extra_headers values: printable ASCII 0x20-0x7E only, non-empty, ≤1024 bytes, NO leading/trailing SP/HTAB (measured undici Headers TRIMS at dispatch — a value we would not send byte-identically is REJECTED; undici itself rejects only NUL/CR/LF, so RFC 9110 CTL rejection is OUR validator's job).",
+      "extra_headers_allowlist": "CLOSED, additively-extensible allowlist (RR-5c): http-referer, x-title, openai-organization, openai-project, openai-beta — demonstrably non-secret metadata. Secret-capable names (helicone-auth, cf-aig-authorization, x-api-key, and every *-key/*-token/*-secret/*-auth* gateway header) are UNREPRESENTABLE, so plaintext jsonb storage + read-echo stay valid.",
+      "exactly_one_auth_header": "RR-5a: at dispatch extras are applied BEFORE the auth header and may not (case-folded) collide with it, so exactly one auth header leaves the box. header_name (api_key_header) may be an api-key-style name but never authorization/proxy-authorization/transport; extra_headers keys may never be transport/authorization-class or collide with the selected auth header."
+    },
+    "golden_format": {
+      "paired": "golden/management-<stem>.request.json {method,path,headers(subset),body?,chain?,request_volatile?,$comment?} + golden/management-<stem>.response.json {status,headers(subset),body,volatile,$comment?}",
+      "volatile": "JSON-Pointer list normalized before byte-comparison (/body/id, /body/created_at, /headers/etag, cursors, ...); everything else byte-locked to the real handler serializer",
+      "request_volatile": "optional JSON-Pointer list on the REQUEST half, normalized identically to volatile; used ONLY where live-derived values are structurally unavoidable (the chained plan id inside /path, the chained confirm in /body) — every other request member is a literal recording, including Idempotency-Key values (fixed UUIDv4 constants; the replay harness pre-cleans their idempotency rows so a replay executes fresh)",
+      "chained": "a request golden may declare chain: {from: <stem>, derive: {<request JSON-Pointer>: <JSON-Pointer into the FROM stem's response record — /body/... or /headers/...>}}; from references ANY stem executed EARLIER in the battery order, not only the immediately-preceding one (plan.apply AND plan.apply.replay both derive from plan.create; project.list.page2 derives from project.list); at replay each derived member is re-derived from that stem's LIVE exchange. The special target /path is a SUBSTRING substitution: the recorded occurrence of the derived value inside the stored path is replaced by the live value, and comparison masks ONLY that occurrence — the static route template (e.g. /v1/management/plans/<volatile>/apply) stays byte-locked; every other derived member is whole-member masked. Every derived member MUST also appear in request_volatile",
+      "comparison": "each half: raw recorded text -> JSON.parse -> replace every declared volatile pointer with the sentinel \"<volatile>\" (a pointer that fails to resolve on EITHER side is drift and FAILS the comparison) -> JSON.stringify preserving member order (no key sorting) -> byte equality. Headers: allowlisted names only, matched case-insensitively by name with exact value comparison including media-type parameters. Authorization is NEVER stored on either half.",
+      "categories": {
+        "management-project.get": "single-resource success envelope (object/id/created_at/etag)",
+        "management-project.list": "list envelope + keyset pagination (has_more/next_cursor)",
+        "management-project.list.page2": "keyset pagination CONSUMPTION: page 1's live next_cursor is spent on a chained second request that must advance (non-repeating row) — proving the cursor is usable, not merely present",
+        "management-plan.create": "plan object (confirm_string/state_hash/changes/danger/gating)",
+        "management-plan.apply": "apply success (applied DTO + ETag + Idempotency-Key)",
+        "management-plan.apply.replay": "idempotency replay (same key + same fingerprint -> stored response verbatim + Idempotency-Replayed: true)",
+        "management-problem.not_found": "RFC 9457 problem+json",
+        "management-problem.version_unsupported": "version negotiation fail-closed (CON-20; every golden — success or error, either error plane — also records the echo header)",
+        "management-problem.not_implemented": "reserved surface 501 through the full auth/scope chain",
+        "management-whoami.get": "discovery/self principal reflection",
+        "management-oauth.meta.as.root": "AS metadata well-known (A009 authorization_endpoint + S256 + audience SET — the L4-R0 bytes)",
+        "management-oauth.device_authorization": "secret-bearing 6749-plane success (CI-minted throwaway device/user codes, $comment dead-fixture marker)",
+        "management-oauth.device_authorization.error.invalid_client": "RFC 6749 boundary error (flat {error}, no-store/pragma, zero RFC 9457 members)",
+        "management-oauth.device_authorization.error.invalid_request": "RFC 6749 boundary error, malformed-request trigger",
+        "management-model_route.defaults": "v1.2.0 (R-J): static server-owned catalog read — non-list non-resource envelope (object:model_route_defaults / catalog_version / defaults[]); catalog_version + defaults declared volatile so a content bump never breaks the golden (§6.2)"
+      },
+      "secret_safety": "mint goldens carry CI-minted throwaway values + a $comment dead-fixture marker; golden paths secret-scan allow-listed (CON-10). management_token.create's SUCCESS golden is deferred: its minter policy is session-transport-only (SEC-6 — a bearer-token minter is 403 by design), so it is unrecordable from the bearer e2e harness; the secret-bearing category is carried by oauth.device_authorization until a dashboard-session recording lands (post-freeze additive minor).",
+      "recorded_not_authored": "recordings of ratified handlers against a seeded throwaway DB (CON-7 — regen-goldens SKIPS management by directory isolation; management goldens land at L2-close/TAIL-FREEZE, recorded at T-202). Recorder/replayer: packages/api/e2e/management-golden.e2e.test.ts — GOLDEN_RECORD=1 records to a temp dir, validates completeness + secret rules, replays from it, then atomically replaces golden/; the default mode replays the committed pairs against the live server; GOLDEN_VERIFY=1 re-records to temp and diffs the normalized outputs + file manifest against the committed set."
+    },
+    "auth_model": {
+      "grandfather_rule": "legacy scopeless mgmt_* tokens = all project-family scopes for their project EXCEPT admin:* and members-write (OD-4) — ratified here so it is explicit wire behavior, not an accident.",
+      "excluded_ceremonies": "human-identity ceremonies (signup/password/TOTP/email) stay dashboard-session-only (OD-9); superadmin minting stays SSH-CLI-only.",
+      "account_security_state_absent": "v1.2.0 (R-A Variant-A): there is NO management-plane account-security-state read op, and none is reserved — a mgmt_* bearer must never learn the account's 2FA/lockout posture (a leaked token would inherit it). The dashboard's own security state is served ONLY by the session-authed dashboard route app/api/account/security/route.ts (a mgmt_* bearer hitting it → 401). That route's shape deliberately OMITS active_sessions: the plane is stateless-JWT (users.session_version counter only), so a session LIST would be a false affordance (§B-2) — never faked. If a real session store ever lands, active_sessions is an additive member.",
+      "rate_limits_non_contract": "429 codes + Retry-After are contract; numeric limits are ops config, explicitly NON-contract."
+    }
+  }
+}

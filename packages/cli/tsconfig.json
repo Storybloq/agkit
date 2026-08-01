@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    // T-211: tsup's dts (rollup-dts) worker injects a `baseUrl` internally, which TS 6.0
+    // reports as a hard error (TS5101). Silence just that deprecation so the typed `.d.ts`
+    // surface (A19/A38) can be emitted; it changes no type-checking behavior.
+    "ignoreDeprecations": "6.0"
+  },
+  "include": ["src"]
+}

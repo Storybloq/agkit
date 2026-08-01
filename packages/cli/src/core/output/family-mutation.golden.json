@@ -1,0 +1,26 @@
+{
+  "family": "mutation",
+  "purpose": "A MUTATION RESULT: the plan ceremony fetches the plan, the CLI-side confirm gate passes, the apply is sent, and the applied plan (carrying `results[]`) is the success payload at exit 0.",
+  "cases": [
+    {
+      "name": "plan apply, confirmed non-interactively",
+      "argv": [
+        "plan",
+        "apply",
+        "plan_UKiJIG6eQXCCi-K6cyYxsA",
+        "--yes",
+        "--confirm",
+        "apply PR plan: model_route.create",
+        "--json",
+        "--retries",
+        "0"
+      ],
+      "provenance": "TWO turns: management-plan.create.response.json as the ceremony's plan.get body, then management-plan.apply.response.json. The confirm string and the plan id are READ off the first body, and the frozen clock sits inside that plan's validity window.",
+      "rendered": {
+        "stdout": "{\n  \"version\": 1,\n  \"data\": {\n    \"object\": \"plan\",\n    \"id\": \"plan_UKiJIG6eQXCCi-K6cyYxsA\",\n    \"status\": \"applied\",\n    \"changes\": [\n      {\n        \"body\": {\n          \"tier\": \"premium\",\n          \"model\": \"claude-opus-4-1\",\n          \"default\": false,\n          \"enabled\": true,\n          \"provider\": \"anthropic\",\n          \"attestation\": \"off\",\n          \"execution_target\": \"cloud_relay\",\n          \"fallback_execution_target\": null\n        },\n        \"path\": \"/v1/management/projects/00000000-0000-4000-b000-00000000900d/model-routes\",\n        \"action\": \"create\",\n        \"resource\": \"model_route\"\n      }\n    ],\n    \"diff\": [\n      {\n        \"op\": \"create\",\n        \"path\": \"/v1/management/projects/00000000-0000-4000-b000-00000000900d/model-routes\",\n        \"after\": {\n          \"tier\": \"premium\",\n          \"model\": \"claude-opus-4-1\",\n          \"default\": false,\n          \"enabled\": true,\n          \"provider\": \"anthropic\",\n          \"attestation\": \"off\",\n          \"execution_target\": \"cloud_relay\",\n          \"fallback_execution_target\": null\n        },\n        \"resource\": \"model_route\"\n      }\n    ],\n    \"preconditions\": [\n      {\n        \"path\": \"/v1/management/projects/00000000-0000-4000-b000-00000000900d/model-routes?tier=premium\",\n        \"absent\": true\n      }\n    ],\n    \"state_hash\": \"sha256:ee889a6aac7eff66ec0911b05752cc6f\",\n    \"confirm_string\": \"apply PR plan: model_route.create\",\n    \"danger\": \"PR\",\n    \"gating\": \"plan_required\",\n    \"created_by\": \"mgmt-token:4af1ee6d-b122-4006-90ab-94baa39d3cc3\",\n    \"expires_at\": \"2026-07-15T01:51:14.803Z\",\n    \"created_at\": \"2026-07-15T01:36:14.803Z\",\n    \"results\": [\n      {\n        \"action\": \"create\",\n        \"resource\": \"model_route\",\n        \"path\": \"/v1/management/projects/00000000-0000-4000-b000-00000000900d/model-routes\",\n        \"result\": \"created\"\n      }\n    ],\n    \"etag\": \"sha256:41d39e2bd0302a65a4b61b18280970ca\"\n  }\n}\n",
+        "stderr": "Plan plan_UKiJIG6eQXCCi-K6cyYxsA - danger PR (prod-rebinding)\n  expires in 7m 30s\n  !! PROD-REBINDING: this plan re-binds LIVE traffic - model_route.create\n  changes:\n    create model_route /v1/management/projects/00000000-0000-4000-b000-00000000900d/model-routes\n      (absent) -> {\"tier\":\"premium\",\"model\":\"claude-opus-4-1\",\"provider\":\"anthropic\",\"execution_target\":\"cloud_relay\",\"fallback_execution_target\":null,\"attestation\":\"off\",\"enabled\":true,\"default\":false}\n  to proceed, type this confirm string exactly:\n    apply PR plan: model_route.create\n",
+        "exitCode": 0
+      }
+    }
+  ]
+}

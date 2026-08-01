@@ -1,0 +1,71 @@
+{
+  "name": "@shyegg/agkit",
+  "version": "0.0.1",
+  "description": "AgentKit management-plane CLI + MCP server (agkit).",
+  "mcpName": "cloud.agkit/agkit",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Storybloq/agkit.git"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "bin": {
+    "agkit": "./dist/cli.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "!dist/metafile-esm.json",
+    "skill",
+    "README.md"
+  ],
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./mcp": {
+      "types": "./dist/mcp.d.ts",
+      "default": "./dist/mcp.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup && node scripts/inline-shared-dts.mjs",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "scan:dist": "node --import ./scripts/register-ts-resolve.mjs --experimental-strip-types scripts/scan-dist-vocab.mjs",
+    "regen:goldens": "tsx scripts/regen-goldens.ts",
+    "prepublishOnly": "node scripts/prepublish-guard.mjs && pnpm build && pnpm test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@napi-rs/keyring": "^1.3.0",
+    "yargs": "^17.7.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@agentkit-cloud/management-core": "workspace:*",
+    "@agentkit-cloud/shared": "workspace:*",
+    "@types/node": "^24.13.2",
+    "@types/yargs": "^17.0.35",
+    "ajv": "^8.20.0",
+    "jq-wasm": "3.0.0-jq-1.8.2",
+    "mdast-util-from-markdown": "^2.0.3",
+    "mdast-util-gfm": "^3.1.0",
+    "micromark-extension-gfm": "^3.0.0",
+    "smol-toml": "^1.4.2",
+    "tsup": "^8.5.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

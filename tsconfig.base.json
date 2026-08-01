@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    // TS 6.0 no longer auto-discovers node_modules/@types — ambient types
+    // must be listed explicitly. Everything else (react, vitest, jose…)
+    // arrives through module imports and needs no entry here.
+    "types": ["node"],
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true
+  }
+}

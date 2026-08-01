@@ -1,0 +1,247 @@
+[
+  {
+    "command": "account security",
+    "danger": "SR",
+    "reason": "human browser deep-link + auth self-lookup (N-011 A003 class): prints a dashboard-session URL a token principal cannot use and principal facts the whoami self-lookup already owns"
+  },
+  {
+    "command": "agent sync",
+    "danger": "PR",
+    "reason": "direct_confirm: no TTY for the typed challenge and no local file over MCP ⇒ would be an unconfirmed bulk overwrite"
+  },
+  {
+    "command": "api delete",
+    "danger": "M",
+    "reason": "raw wire escape hatch — returns no Plan; typed MCP tools own the agent surface"
+  },
+  {
+    "command": "api get",
+    "danger": "SR",
+    "reason": "raw wire escape hatch — MCP agents get typed, scope-audited tools; a raw HTTP door would bypass tool-level labeling"
+  },
+  {
+    "command": "api patch",
+    "danger": "M",
+    "reason": "raw wire escape hatch — returns no Plan; typed MCP tools own the agent surface"
+  },
+  {
+    "command": "api post",
+    "danger": "M",
+    "reason": "raw wire escape hatch — returns no Plan; typed MCP tools own the agent surface"
+  },
+  {
+    "command": "api put",
+    "danger": "M",
+    "reason": "raw wire escape hatch — returns no Plan; typed MCP tools own the agent surface"
+  },
+  {
+    "command": "attested-key revoke",
+    "danger": "D",
+    "reason": "destructive direct_confirm revoke (typed human confirm ceremony); returns no plan — not an MCP tool"
+  },
+  {
+    "command": "billing checkout",
+    "danger": "M",
+    "reason": "human browser ceremony — returns a Stripe checkout URL for a human to open; never a Plan"
+  },
+  {
+    "command": "billing portal",
+    "danger": "M",
+    "reason": "human browser ceremony — returns a Stripe billing-portal URL for a human to open; never a Plan"
+  },
+  {
+    "command": "config get",
+    "danger": "SR",
+    "reason": "cross-cutting local config command; not a management resource tool"
+  },
+  {
+    "command": "config list",
+    "danger": "SR",
+    "reason": "cross-cutting local config command; not a management resource tool"
+  },
+  {
+    "command": "config set",
+    "danger": "M",
+    "reason": "cross-cutting local config command; not a management resource tool"
+  },
+  {
+    "command": "config unset",
+    "danger": "M",
+    "reason": "cross-cutting local config command; not a management resource tool"
+  },
+  {
+    "command": "dashboard open",
+    "danger": "SR",
+    "reason": "opens a local browser — human surface"
+  },
+  {
+    "command": "grant revoke",
+    "danger": "D",
+    "reason": "destructive direct_confirm revoke (typed human confirm ceremony); returns no plan — not an MCP tool"
+  },
+  {
+    "command": "init run",
+    "danger": "M",
+    "reason": "interactive onboarding orchestrator: it prompts, writes repo files, and discloses a shown-once key"
+  },
+  {
+    "command": "kill-switch activate",
+    "danger": "D",
+    "reason": "incident-response direct_confirm ceremony — typed project-name confirm + mandatory reason; engaging a kill switch stays a human act; returns no Plan"
+  },
+  {
+    "command": "login create",
+    "danger": "M",
+    "reason": "interactive auth lifecycle (N-011 APX-E.4); never a management-resource MCP tool"
+  },
+  {
+    "command": "logout clear",
+    "danger": "M",
+    "reason": "interactive auth lifecycle (N-011 APX-E.4); never a management-resource MCP tool"
+  },
+  {
+    "command": "mcp doctor",
+    "danger": "SR",
+    "reason": "the MCP integration's own oracle: a diagnostic reachable as a tool of the server it diagnoses cannot report that server failing to start, and every verdict it returns over that transport is self-confirming — run it from the shell, never as an agent tool"
+  },
+  {
+    "command": "mcp print-config",
+    "danger": "SR",
+    "reason": "cross-cutting local command: prints THIS server's own client-registration snippets, baking the absolute path of the binary the host already spawned — circular over MCP, and a machine-layout fact a tool has no reason to hand back; not a management resource tool"
+  },
+  {
+    "command": "mcp serve",
+    "danger": "SR",
+    "reason": "self-hosting paradox — the MCP server cannot be an MCP tool"
+  },
+  {
+    "command": "plan apply",
+    "danger": "PR",
+    "reason": "the single gated MCP executor agkit_apply is contributed by L3-M1 (APX-D: not a verb-folded resource tool)"
+  },
+  {
+    "command": "plan discard",
+    "danger": "M",
+    "reason": "fixed MCP tool agkit_plan_discard is contributed by L3-M1 (APX-D: not a verb-folded resource tool)"
+  },
+  {
+    "command": "profile delete",
+    "danger": "M",
+    "reason": "cross-cutting local profile command; not a management resource tool"
+  },
+  {
+    "command": "profile list",
+    "danger": "SR",
+    "reason": "cross-cutting local profile command; not a management resource tool"
+  },
+  {
+    "command": "profile rename",
+    "danger": "M",
+    "reason": "cross-cutting local profile command; not a management resource tool"
+  },
+  {
+    "command": "profile show",
+    "danger": "SR",
+    "reason": "cross-cutting local profile command; not a management resource tool"
+  },
+  {
+    "command": "profile use",
+    "danger": "M",
+    "reason": "cross-cutting local profile command; not a management resource tool"
+  },
+  {
+    "command": "provider-key revoke",
+    "danger": "PR",
+    "reason": "destructive direct_confirm revoke (typed human confirm ceremony); returns no plan — not an MCP tool"
+  },
+  {
+    "command": "publishable-key create",
+    "danger": "M",
+    "reason": "direct shown-once mint returns no Plan (N-011 APX-D); cannot honestly project as a plan tool"
+  },
+  {
+    "command": "publishable-key revoke",
+    "danger": "D",
+    "reason": "destructive direct_confirm revoke (typed human confirm ceremony); returns no plan — not an MCP tool"
+  },
+  {
+    "command": "revenuecat set",
+    "danger": "PR",
+    "reason": "secret-bearing direct_confirm ceremony — the key rides env-indirection or a hidden TTY prompt, neither available to an MCP host; returns no Plan"
+  },
+  {
+    "command": "secret-source add",
+    "danger": "M",
+    "reason": "operator allowlist for indirect secret sources — writable ONLY from the CLI channel (an MCP host that could declare a source could expand its own read authority); not an MCP tool"
+  },
+  {
+    "command": "secret-source list",
+    "danger": "SR",
+    "reason": "operator allowlist for indirect secret sources — writable ONLY from the CLI channel (an MCP host that could declare a source could expand its own read authority); not an MCP tool"
+  },
+  {
+    "command": "secret-source remove",
+    "danger": "M",
+    "reason": "operator allowlist for indirect secret sources — writable ONLY from the CLI channel (an MCP host that could declare a source could expand its own read authority); not an MCP tool"
+  },
+  {
+    "command": "selftest run",
+    "danger": "M",
+    "reason": "diagnostic aggregate performing a live write probe; not a resource tool"
+  },
+  {
+    "command": "setup run",
+    "danger": "M",
+    "reason": "local environment provisioning: writes ~/.claude/skills, the project's AGENTS.md and ~/.codex/config.toml — an MCP host must never rewrite its own client wiring; not an MCP tool"
+  },
+  {
+    "command": "status get",
+    "danger": "SR",
+    "reason": "cross-cutting local session aggregate (server fields land in T-211); not a management resource tool"
+  },
+  {
+    "command": "token create",
+    "danger": "M",
+    "reason": "secret-bearing shown-once mint (human ceremony); not exposed as an MCP tool"
+  },
+  {
+    "command": "token revoke",
+    "danger": "D",
+    "reason": "destructive direct_confirm revoke (typed human confirm ceremony); returns no plan — not an MCP tool"
+  },
+  {
+    "command": "upgrade run",
+    "danger": "M",
+    "reason": "mutates the local install; never an agent tool"
+  },
+  {
+    "command": "version get",
+    "danger": "SR",
+    "reason": "cross-cutting local command; not a management resource tool"
+  },
+  {
+    "command": "voice-identity disable",
+    "danger": "PR",
+    "reason": "typed-confirm direct ceremony (the toggle path re-validates on enable) — returns no Plan"
+  },
+  {
+    "command": "voice-identity enable",
+    "danger": "PR",
+    "reason": "typed-confirm direct ceremony (enable re-validates live at the provider) — returns no Plan"
+  },
+  {
+    "command": "voice-identity revalidate",
+    "danger": "M",
+    "reason": "direct external revalidation returning a verdict, not a Plan"
+  },
+  {
+    "command": "voice-identity set",
+    "danger": "PR",
+    "reason": "typed-confirm direct ceremony binding a wire-secret resource id (out-of-band channels only) — returns no Plan"
+  },
+  {
+    "command": "whoami get",
+    "danger": "SR",
+    "reason": "cross-cutting auth self-lookup (N-011 A003); not a management resource tool"
+  }
+]

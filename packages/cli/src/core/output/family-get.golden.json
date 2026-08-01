@@ -1,0 +1,23 @@
+{
+  "family": "get",
+  "purpose": "A single resource: `data` is an object, no `partial`, exit 0.",
+  "cases": [
+    {
+      "name": "project get, one resource",
+      "argv": [
+        "project",
+        "get",
+        "00000000-0000-4000-b000-00000000900d",
+        "--json",
+        "--retries",
+        "0"
+      ],
+      "provenance": "management-project.get.response.json, verbatim apart from the opaque-run transform.",
+      "rendered": {
+        "stdout": "{\n  \"version\": 1,\n  \"data\": {\n    \"object\": \"project\",\n    \"id\": \"00000000-0000-4000-b000-00000000900d\",\n    \"name\": \"golden-contract\",\n    \"created_at\": \"2026-07-15T01:12:45.480Z\",\n    \"app_attest_app_id\": null,\n    \"app_attest_environment\": \"production\"\n  }\n}\n",
+        "stderr": "",
+        "exitCode": 0
+      }
+    }
+  ]
+}

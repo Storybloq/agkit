@@ -1,0 +1,55 @@
+# agkit bash completion (generated from the registry — do not edit)
+_agkit() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local top="account agent agent-tool api apply attestation attested-key audit billing completion config dashboard end-user grant help init issuer kill-switch login logout mcp media-job media-quota media-route media-usage member pk plan profile project provider-key publishable-key quota reference revenuecat route secret-source selftest setup status token upgrade usage version voice voice-identity whoami"
+  local flags="--action --actor --algorithm --all-profiles --allowed-tiers --api-key-env --api-key-file --app-attest-app-id --attestation --audience --auth-style --check --clear --clear-fallback-execution-target --clear-safety-settings --clear-thinking-config --client --color --compact --config-json --confirm --cursor --days --default --description --device --dimension --disabled --display-name --email --enabled --endpoint-url --env --environment --execution-target --expires-in --extra-header --fallback-execution-target --field --fields --file --firebase-project-id --header-name --idempotency-key --if-match --input --insecure-storage --issuer --jq --json --jwks-uri --key-name --limit --max-audio-seconds-per-day --max-dubbing-jobs-per-day --max-image-generations-per-day --max-input-tokens --max-monthly-spend-per-user-usd --max-output-tokens --max-requests-per-second-per-user --max-turns-per-day-per-user --max-video-generations-per-day --media-budget-alert-threshold-usd --model --monthly-media-budget-usd --monthly-spend-alert-threshold-usd --monthly-spend-cap-usd --monthly-token-cap --new --no-browser --no-color --offline --old --paginate --parameter-schema --plan --plan-only --profile --project --project-name --provider --public-key --reason --resource-id-env --retries --reuse-key --rotate-credential --safety-settings --scope --scopes --since --static-system-prompt --status --template --thinking-config --tier --until --user-hash --value --verbose --yes"
+  if [ "$COMP_CWORD" -eq 1 ]; then
+    COMPREPLY=( $(compgen -W "$top" -- "$cur") )
+    return
+  fi
+  case "${COMP_WORDS[1]}" in
+    account) COMPREPLY=( $(compgen -W "get security usage $flags" -- "$cur") ); return ;;
+    agent) COMPREPLY=( $(compgen -W "create delete get list sync update $flags" -- "$cur") ); return ;;
+    agent-tool) COMPREPLY=( $(compgen -W "create delete get list update $flags" -- "$cur") ); return ;;
+    api) COMPREPLY=( $(compgen -W "DELETE GET PATCH POST PUT delete get patch post put $flags" -- "$cur") ); return ;;
+    attestation) COMPREPLY=( $(compgen -W "get set $flags" -- "$cur") ); return ;;
+    attested-key) COMPREPLY=( $(compgen -W "list revoke $flags" -- "$cur") ); return ;;
+    audit) COMPREPLY=( $(compgen -W "list $flags" -- "$cur") ); return ;;
+    billing) COMPREPLY=( $(compgen -W "checkout info plans portal $flags" -- "$cur") ); return ;;
+    config) COMPREPLY=( $(compgen -W "get list set unset $flags" -- "$cur") ); return ;;
+    dashboard) COMPREPLY=( $(compgen -W "open $flags" -- "$cur") ); return ;;
+    end-user) COMPREPLY=( $(compgen -W "get list $flags" -- "$cur") ); return ;;
+    grant) COMPREPLY=( $(compgen -W "list revoke show $flags" -- "$cur") ); return ;;
+    init) COMPREPLY=( $(compgen -W "run $flags" -- "$cur") ); return ;;
+    issuer) COMPREPLY=( $(compgen -W "create delete get list update $flags" -- "$cur") ); return ;;
+    kill-switch) COMPREPLY=( $(compgen -W "activate deactivate status $flags" -- "$cur") ); return ;;
+    login) COMPREPLY=( $(compgen -W "create $flags" -- "$cur") ); return ;;
+    logout) COMPREPLY=( $(compgen -W "clear $flags" -- "$cur") ); return ;;
+    mcp) COMPREPLY=( $(compgen -W "doctor print-config serve $flags" -- "$cur") ); return ;;
+    media-job) COMPREPLY=( $(compgen -W "get list $flags" -- "$cur") ); return ;;
+    media-quota) COMPREPLY=( $(compgen -W "clear get set $flags" -- "$cur") ); return ;;
+    media-route) COMPREPLY=( $(compgen -W "disable enable get list set $flags" -- "$cur") ); return ;;
+    media-usage) COMPREPLY=( $(compgen -W "costs requests summary $flags" -- "$cur") ); return ;;
+    member) COMPREPLY=( $(compgen -W "list $flags" -- "$cur") ); return ;;
+    plan) COMPREPLY=( $(compgen -W "apply discard list show $flags" -- "$cur") ); return ;;
+    profile) COMPREPLY=( $(compgen -W "delete list rename show use $flags" -- "$cur") ); return ;;
+    project) COMPREPLY=( $(compgen -W "archive create get list ls rename summary $flags" -- "$cur") ); return ;;
+    provider-key) COMPREPLY=( $(compgen -W "add list revoke rotate $flags" -- "$cur") ); return ;;
+    publishable-key|pk) COMPREPLY=( $(compgen -W "create list revoke $flags" -- "$cur") ); return ;;
+    quota) COMPREPLY=( $(compgen -W "clear get set $flags" -- "$cur") ); return ;;
+    revenuecat) COMPREPLY=( $(compgen -W "delete get set $flags" -- "$cur") ); return ;;
+    route) COMPREPLY=( $(compgen -W "create defaults delete get list update $flags" -- "$cur") ); return ;;
+    secret-source) COMPREPLY=( $(compgen -W "add list remove $flags" -- "$cur") ); return ;;
+    selftest) COMPREPLY=( $(compgen -W "run $flags" -- "$cur") ); return ;;
+    setup) COMPREPLY=( $(compgen -W "run $flags" -- "$cur") ); return ;;
+    status) COMPREPLY=( $(compgen -W "get $flags" -- "$cur") ); return ;;
+    token) COMPREPLY=( $(compgen -W "create get list revoke $flags" -- "$cur") ); return ;;
+    upgrade) COMPREPLY=( $(compgen -W "run $flags" -- "$cur") ); return ;;
+    usage) COMPREPLY=( $(compgen -W "requests series top-users $flags" -- "$cur") ); return ;;
+    version) COMPREPLY=( $(compgen -W "get $flags" -- "$cur") ); return ;;
+    voice-identity|voice) COMPREPLY=( $(compgen -W "delete disable enable get list revalidate set $flags" -- "$cur") ); return ;;
+    whoami) COMPREPLY=( $(compgen -W "get $flags" -- "$cur") ); return ;;
+  esac
+  COMPREPLY=( $(compgen -W "$flags" -- "$cur") )
+}
+complete -F _agkit agkit

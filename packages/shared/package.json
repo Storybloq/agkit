@@ -1,0 +1,103 @@
+{
+  "name": "@agentkit-cloud/shared",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": {
+      "agentkit-dist": "./dist/index.js",
+      "default": "./src/index.ts"
+    },
+    "./db": {
+      "agentkit-dist": "./dist/db/index.js",
+      "default": "./src/db/index.ts"
+    },
+    "./oauth-limits": {
+      "agentkit-dist": "./dist/oauth-limits.js",
+      "default": "./src/oauth-limits.ts"
+    },
+    "./client-ip": {
+      "agentkit-dist": "./dist/client-ip.js",
+      "default": "./src/client-ip.ts"
+    },
+    "./auth": {
+      "agentkit-dist": "./dist/auth/index.js",
+      "default": "./src/auth/index.ts"
+    },
+    "./wire-contract": {
+      "agentkit-dist": "./dist/wire-contract/index.js",
+      "default": "./src/wire-contract/index.ts"
+    },
+    "./wire-contract/media": {
+      "agentkit-dist": "./dist/wire-contract/media.js",
+      "default": "./src/wire-contract/media.ts"
+    },
+    "./wire-contract/management": {
+      "agentkit-dist": "./dist/wire-contract/management.js",
+      "default": "./src/wire-contract/management.ts"
+    },
+    "./wire-contract/management-data": {
+      "agentkit-dist": "./dist/wire-contract/management-data.js",
+      "default": "./src/wire-contract/management-data.ts"
+    },
+    "./wire-contract/management-routes-data": {
+      "agentkit-dist": "./dist/wire-contract/management-routes-data.js",
+      "default": "./src/wire-contract/management-routes-data.ts"
+    },
+    "./wire-contract/management-types.gen": {
+      "agentkit-dist": "./dist/wire-contract/management-types.gen.js",
+      "default": "./src/wire-contract/management-types.gen.ts"
+    },
+    "./crypto": {
+      "agentkit-dist": "./dist/crypto/index.js",
+      "default": "./src/crypto/index.ts"
+    },
+    "./audit": {
+      "agentkit-dist": "./dist/audit/index.js",
+      "default": "./src/audit/index.ts"
+    },
+    "./domain": {
+      "agentkit-dist": "./dist/domain/index.js",
+      "default": "./src/domain/index.ts"
+    },
+    "./knowledge": {
+      "agentkit-dist": "./dist/knowledge/index.js",
+      "default": "./src/knowledge/index.ts"
+    },
+    "./knowledge/bindings": {
+      "agentkit-dist": "./dist/knowledge/bindings.js",
+      "default": "./src/knowledge/bindings.ts"
+    },
+    "./knowledge/vocab": {
+      "agentkit-dist": "./dist/knowledge/vocab.js",
+      "default": "./src/knowledge/vocab.ts"
+    },
+    "./knowledge/gate": {
+      "agentkit-dist": "./dist/knowledge/gate/index.js",
+      "default": "./src/knowledge/gate/index.ts"
+    },
+    "./knowledge/ingest": {
+      "agentkit-dist": "./dist/knowledge/ingest-accept.js",
+      "default": "./src/knowledge/ingest-accept.ts"
+    },
+    "./knowledge/gate/node": {
+      "agentkit-dist": "./dist/knowledge/gate/index.node.js",
+      "default": "./src/knowledge/gate/index.node.ts"
+    },
+    "./provider-validation": {
+      "agentkit-dist": "./dist/lib/provider-validation.js",
+      "default": "./src/lib/provider-validation.ts"
+    },
+    "./crypto/rotate-cli": {
+      "agentkit-dist": "./dist/crypto/rotate-cli.js",
+      "default": "./src/crypto/rotate-cli.ts"
+    },
+    "./db/migrate": {
+      "agentkit-dist": "./dist/db/migrate.js",
+      "default": "./src/db/migrate.ts"
+    },
+    "./contract/management/v1.1.0/management.json": "./contract/management/v1.1.0/management.json",
+    "./contract/management/v1.1.0/management-routes.json": "./contract/management/v1.1.0/management-routes.json",
+    "./contract/management/v1.2.0/management.json": "./contract/management/v1.2.0/management.json",
+    "./contract/management/v1.2.0/management-routes.json": "./contract/management/v1.2.0/management-routes.json"
+  }
+}

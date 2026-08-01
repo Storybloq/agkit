@@ -1,0 +1,106 @@
+# =============================================================================
+# verify.yml — the mirror's own PR/push check (T-228 §6/§8)
+# =============================================================================
+# GENERATED into the public mirror at `.github/workflows/verify.yml` by the
+# PRIVATE repo's `scripts/mirror-sync.mjs`. Do not hand-edit it here.
+#
+# SCOPE, AND THE JUSTIFICATION FOR IT. This runs install + a DEV build + the pack
+# whitelist + a cold smoke, and the mirror-contract assertions below. It runs NO
+# tests and NO publish. That is deliberate, not an omission:
+#
+#   • The mirror's purpose is PROVENANCE, not development. Its source is the real,
+#     complete build-input set (verified against the esbuild metafile and the dts
+#     graph), but the 300+ test files read `src/commands/reserved/` directly, import
+#     management-core internals, and are saturated with internal-ledger prose. They
+#     stay in the private monorepo, where they remain authoritative over the SAME
+#     BYTES — the sync's build-and-compare gate is what transfers that authority.
+#   • The release path does not depend on this workflow. `release.yml` re-verifies
+#     the packed bytes against `RELEASE_EXPECT.json` before it publishes anything.
+#     This job exists so an obviously-broken mirror is visible immediately rather
+#     than at tag time.
+#
+# ACTION PINS: carried from the private monorepo's ci.yml. TODO(owner): re-verify
+# at mirror creation and on every bump (see release.yml's note).
+# =============================================================================
+name: verify
+
+on:
+  push:
+    branches: ["**"]
+    tags-ignore: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "24"
+
+jobs:
+  verify:
+    name: build + pack + smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Mirror contract — the reserved tree is the STUB, and nothing sets the flag
+        # The two invariants the mirror exists to hold. Cheap, and they fail closed:
+        # an empty directory listing is as much a failure as a wrong one.
+        run: |
+          set -euo pipefail
+          found="$(find packages/cli/src/commands/reserved -type f | sort)"
+          printf '%s\n' "$found"
+          [ "$found" = "packages/cli/src/commands/reserved/index.ts" ] \
+            || { echo "src/commands/reserved must contain EXACTLY the generated stub"; exit 1; }
+          grep -q 'PUBLIC-MIRROR STUB' packages/cli/src/commands/reserved/index.ts \
+            || { echo "src/commands/reserved/index.ts is not the generated stub"; exit 1; }
+          if grep -rn 'AGKIT_SHIP_RESERVED' .github/ 2>/dev/null | grep -v 'never set' | grep -q .; then
+            echo "a workflow references AGKIT_SHIP_RESERVED — the mirror must never ship the reserved trees"
+            grep -rn 'AGKIT_SHIP_RESERVED' .github/ || true
+            exit 1
+          fi
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Dev build
+        # No AGKIT_RELEASE_VERSION: this is a DEV build and must self-report
+        # 0.0.0-dev. Release builds happen only in release.yml, from a tag.
+        run: pnpm --filter @shyegg/agkit build
+
+      - name: Pack whitelist (EXACTLY dist/** + skill/** + README.md + LICENSE + package.json)
+        working-directory: packages/cli
+        run: |
+          set -euo pipefail
+          files="$(npm pack --dry-run --json --ignore-scripts \
+            | node -e "const a=JSON.parse(require('node:fs').readFileSync(0,'utf8'));a[0].files.forEach(f=>console.log(f.path))" \
+            | sort)"
+          printf '%s\n' "$files"
+          for anchor in 'dist/cli.js' 'README.md' 'package.json'; do
+            printf '%s\n' "$files" | grep -qx "$anchor" \
+              || { echo "tarball is missing required anchor: $anchor"; exit 1; }
+          done
+          printf '%s\n' "$files" | grep -q '^skill/' || { echo "tarball ships no skill/ tree"; exit 1; }
+          bad="$(printf '%s\n' "$files" | grep -vE '^(dist/.+|skill/.+|README\.md|LICENSE|package\.json)$' || true)"
+          if [ -n "$bad" ]; then echo "unexpected tarball files:"; printf '%s\n' "$bad"; exit 1; fi
+
+      - name: Cold smoke (global install of the packed tarball, dead loopback port)
+        working-directory: packages/cli
+        run: |
+          set -euo pipefail
+          tgz="$(npm pack --silent --ignore-scripts --pack-destination "$RUNNER_TEMP")"
+          npm install -g --prefix "$RUNNER_TEMP/pfx" "$RUNNER_TEMP/$tgz" >/dev/null
+          out="$(AGKIT_API_URL='http://127.0.0.1:9' AGKIT_API_URL_CONFIRMED='127.0.0.1:9' "$RUNNER_TEMP/pfx/bin/agkit" version)"
+          printf '%s\n' "$out"
+          printf '%s\n' "$out" | node -e '
+            const o = JSON.parse(require("node:fs").readFileSync(0, "utf8"));
+            if (!(typeof o.version === "number" && o.data && o.data.version === "0.0.0-dev" && o.error === undefined)) {
+              console.error("expected a DEV build reporting 0.0.0-dev; got " + JSON.stringify(o));
+              process.exit(1);
+            }
+            console.log("cold smoke OK — dev build reports 0.0.0-dev");
+          '

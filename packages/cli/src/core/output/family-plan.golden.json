@@ -1,0 +1,23 @@
+{
+  "family": "plan",
+  "purpose": "A PLAN document rendered as data: the full contract Plan (diff, preconditions, danger, gating, confirm_string) passed through the chokepoint's redaction pass, exit 0.",
+  "cases": [
+    {
+      "name": "plan show, an open plan",
+      "argv": [
+        "plan",
+        "show",
+        "plan_UKiJIG6eQXCCi-K6cyYxsA",
+        "--json",
+        "--retries",
+        "0"
+      ],
+      "provenance": "management-plan.create.response.json as the plan.get body (the create response IS a plan resource; the freeze records no separate plan.get golden).",
+      "rendered": {
+        "stdout": "{\n  \"version\": 1,\n  \"data\": {\n    \"object\": \"plan\",\n    \"id\": \"plan_UKiJIG6eQXCCi-K6cyYxsA\",\n    \"status\": \"open\",\n    \"changes\": [\n      {\n        \"action\": \"create\",\n        \"resource\": \"model_route\",\n        \"path\": \"/v1/management/projects/00000000-0000-4000-b000-00000000900d/model-routes\",\n        \"body\": {\n          \"tier\": \"premium\",\n          \"model\": \"claude-opus-4-1\",\n          \"provider\": \"anthropic\",\n          \"execution_target\": \"cloud_relay\",\n          \"fallback_execution_target\": null,\n          \"attestation\": \"off\",\n          \"enabled\": true,\n          \"default\": false\n        }\n      }\n    ],\n    \"diff\": [\n      {\n        \"op\": \"create\",\n        \"resource\": \"model_route\",\n        \"path\": \"/v1/management/projects/00000000-0000-4000-b000-00000000900d/model-routes\",\n        \"after\": {\n          \"tier\": \"premium\",\n          \"model\": \"claude-opus-4-1\",\n          \"provider\": \"anthropic\",\n          \"execution_target\": \"cloud_relay\",\n          \"fallback_execution_target\": null,\n          \"attestation\": \"off\",\n          \"enabled\": true,\n          \"default\": false\n        }\n      }\n    ],\n    \"preconditions\": [\n      {\n        \"path\": \"/v1/management/projects/00000000-0000-4000-b000-00000000900d/model-routes?tier=premium\",\n        \"absent\": true\n      }\n    ],\n    \"state_hash\": \"sha256:ee889a6aac7eff66ec0911b05752cc6f\",\n    \"confirm_string\": \"apply PR plan: model_route.create\",\n    \"danger\": \"PR\",\n    \"gating\": \"plan_required\",\n    \"created_by\": \"mgmt-token:4af1ee6d-b122-4006-90ab-94baa39d3cc3\",\n    \"expires_at\": \"2026-07-15T01:51:14.803Z\",\n    \"created_at\": \"2026-07-15T01:36:14.803Z\",\n    \"etag\": \"sha256:119bef34a3cf0578500abdf36ee37b4e\"\n  }\n}\n",
+        "stderr": "",
+        "exitCode": 0
+      }
+    }
+  ]
+}
